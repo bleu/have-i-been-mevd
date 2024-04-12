@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "mev-bot"
+version = "0.1.0"
+description = ""
+authors = ["Pedro Yves Fracari <yves.fracari@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+"discord.py" = "^2.3.2"
+httpx = "^0.27.0"
+web3 = "^6.16.0"
+pystache = "^0.6.5"
+ipython = "^8.23.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

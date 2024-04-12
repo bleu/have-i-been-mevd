@@ -2038,6 +2038,16 @@ files = [
 ]
 
 [[package]]
+name = "ratelimit"
+version = "2.2.1"
+description = "API rate limit decorator"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ratelimit-2.2.1.tar.gz", hash = "sha256:af8a9b64b821529aca09ebaf6d8d279100d766f19e90b5059ac6a718ca6dee42"},
+]
+
+[[package]]
 name = "referencing"
 version = "0.34.0"
 description = "JSON Referencing + Python"
@@ -2653,4 +2663,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c712aaa4c84a6decd83902625684743a8e7d12b09d681d62be1e7ef8ef2ee6e1"
+content-hash = "25fa51f9c5ca1483b1b788c4bd3fe664aa203f1fbffa98fb65664bb5326d1ffd"

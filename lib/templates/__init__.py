@@ -44,44 +44,18 @@ class AbstractTemplate(ABC):
 class AddressScanTemplate(AbstractTemplate):
     @staticmethod
     def __title_template__() -> str:
-        return "MEV Receipt for {{  address  }}"
+        return "MEV Receipt for {{address}}"
 
     @staticmethod
     def __stats_templates__() -> List[str]:
         return [
             {
                 "name": "MEV Suffered",
-                "value": "{{ totalAmountUsd }} across {{ mevTxsLength }} swaps",
+                "value": "{{total_amount_usd}} across {{mev_txs_length}} swaps",
             },
             {
                 "name": "Most lost to",
-                "value": "{{ mostMevContractName }} (total of {{ mostMevUsdAmount }})",
-            },
-        ]
-
-    @staticmethod
-    def __footers_templates__() -> List[str]:
-        return [
-            "Stop Feeding the MEV bots!",
-            "Install MEV blocker: https://cow.fi/mev-blocker",
-        ]
-
-
-class AddressScanAddressNotFound(AbstractTemplate):
-    @staticmethod
-    def __title_template__() -> str:
-        return "MEV Receipt for {{  address  }}"
-
-    @staticmethod
-    def __stats_templates__() -> List[str]:
-        return [
-            {
-                "name": "MEV Suffered",
-                "value": "{{ totalAmountUsd }} across {{ mevTxsLength }} swaps",
-            },
-            {
-                "name": "Most lost to",
-                "value": "{{ mostMevContractName }} (total of {{ mostMevUsdAmount }})",
+                "value": "{{most_mev_protocol_name}} (total of {{most_mev_protocol_usd_amount}})",
             },
         ]
 
@@ -94,10 +68,10 @@ class AddressScanAddressNotFound(AbstractTemplate):
 
 
 data_formatter_configs = [
-    {"key": "totalAmountUsd", "formatter": format_currency},
-    {"key": "mostMevUsdAmount", "formatter": format_currency},
-    {"key": "mostMevContractName", "formatter": str},
-    {"key": "mevTxsLength", "formatter": str},
+    {"key": "total_amount_usd", "formatter": format_currency},
+    {"key": "most_mev_protocol_usd_amount", "formatter": format_currency},
+    {"key": "most_mev_protocol_name", "formatter": str},
+    {"key": "mev_txs_length", "formatter": str},
     {"key": "address", "formatter": str},
 ]
 

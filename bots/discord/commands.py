@@ -22,13 +22,31 @@ bot = Bot(command_prefix="/", intents=intents)
     name="scan_address",
     description="Check if how much funds an address lost on MEV.",
 )
-@app_commands.describe(address="The address to be scanned")
-async def scan_address(interaction: discord.Interaction, address: str):
-    await interaction.response.defer(ephemeral=True)
+@app_commands.describe(
+    address="The address to be scanned",
+    privacy_preserving="If the bot reply should be private or not. Default is not private.",
+)
+@app_commands.choices(
+    privacy_preserving=[
+        app_commands.Choice(name="True", value=1),
+        app_commands.Choice(name="False", value=0),
+    ],
+)
+async def scan_address(
+    interaction: discord.Interaction,
+    address: str,
+    privacy_preserving: app_commands.Choice[int] = None,
+):
+    if privacy_preserving is None:
+        privacy_preserving = app_commands.Choice(name="False", value=0)
+    ephemeral = bool(privacy_preserving.value)
+    await interaction.response.defer(
+        ephemeral=ephemeral,
+    )
     if not get_web3_provider().is_address(address):
         await interaction.followup.send(
             "Invalid address provided, please provide a valid Ethereum address.",
-            ephemeral=True,
+            ephemeral=ephemeral,
         )
         return
 
@@ -37,11 +55,14 @@ async def scan_address(interaction: discord.Interaction, address: str):
     if not len(mev_txs_with_user_loss):
         await interaction.followup.send(
             "No MEV transactions found for the provided address.",
-            ephemeral=True,
+            ephemeral=ephemeral,
         )
         return
     scan_data = get_scan_address_data_from_mev_transactions(
         mev_txs_with_user_loss, address
     )
     embed = AddressScanTemplate.create_discord_embed(asdict(scan_data))
-    await interaction.followup.send(embed=embed, ephemeral=True)
+    await interaction.followup.send(
+        embed=embed,
+        ephemeral=ephemeral,
+    )

@@ -24,17 +24,6 @@ def t_date(ts):
     return datetime.utcfromtimestamp(ts).strftime("%d %b, %Y")
 
 
-def emoji(i):
-    if i == 0:
-        return "🥇"
-    elif i == 1:
-        return "🥈"
-    elif i == 2:
-        return "🥉"
-    else:
-        return "🔹"
-
-
 def fig_to_bytesio(fig):
     image = BytesIO()
     fig.savefig(image, format="png")
@@ -44,6 +33,10 @@ def fig_to_bytesio(fig):
 
 def format_percentage(number):
     return f"{float(number):.2f}%"
+
+
+def capitalize_first_letter(string):
+    return string.capitalize()
 
 
 def format_number(number, decimals=1, show_magnitude=True):

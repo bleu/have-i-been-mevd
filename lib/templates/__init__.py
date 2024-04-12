@@ -3,6 +3,7 @@ import discord
 import pystache
 from abc import ABC, abstractmethod
 from lib.templates.utils import (
+    capitalize_first_letter,
     format_currency,
 )
 
@@ -55,7 +56,7 @@ class AddressScanTemplate(AbstractTemplate):
             },
             {
                 "name": "Most lost to",
-                "value": "{{most_mev_protocol_name}} (total of {{most_mev_protocol_usd_amount}})",
+                "value": "{{most_mev_protocol_name}} ({{most_mev_protocol_usd_amount}})",
             },
         ]
 
@@ -70,7 +71,7 @@ class AddressScanTemplate(AbstractTemplate):
 data_formatter_configs = [
     {"key": "total_amount_usd", "formatter": format_currency},
     {"key": "most_mev_protocol_usd_amount", "formatter": format_currency},
-    {"key": "most_mev_protocol_name", "formatter": str},
+    {"key": "most_mev_protocol_name", "formatter": capitalize_first_letter},
     {"key": "mev_txs_length", "formatter": str},
     {"key": "address", "formatter": str},
 ]

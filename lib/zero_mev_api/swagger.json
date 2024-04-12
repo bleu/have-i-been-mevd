@@ -1,0 +1,366 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Zeromev API",
+    "description": "The zeromev API allows you to get transaction level MEV summary data for the Ethereum blockchain.\n\nPlease read the [usage guide](https://info.zeromev.org/api.html) and [data sources & limitations](https://info.zeromev.org/sources.html) pages before using the API.\n",
+    "termsOfService": "https://info.zeromev.org/disclaimer",
+    "contact": {
+      "name": "zeromev.org",
+      "url": "https://info.zeromev.org/about.html"
+    },
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+      "url": "https://data.zeromev.org/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "public",
+      "description": "unauthenticated operations available to the public"
+    }
+  ],
+  "paths": {
+    "/mevBlock": {
+      "get": {
+        "tags": ["public"],
+        "summary": "returns MEV transactions for one or more blocks",
+        "description": "returns all MEV related transactions for the passed block_number, or the number of blocks specified by count starting from block_number.",
+        "operationId": "mevBlock",
+        "parameters": [
+          {
+            "name": "block_number",
+            "in": "query",
+            "description": "the passed Ethereum block number to return MEV transactions for or from (if count is supplied).",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int64",
+              "example": 16824820
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "description": "the maximum number of blocks to return from block_number (between 1 and 100).",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MEV transactions matching criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/mevTransaction"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      }
+    },
+    "/mevTransactions": {
+      "get": {
+        "tags": ["public"],
+        "summary": "returns MEV transactions by originating address",
+        "description": "returns all MEV transactions originating from the passed Ethereum wallet address. Paginates every 1000 transactions. One or both address parameters must be supplied",
+        "operationId": "mevTransactions",
+        "parameters": [
+          {
+            "name": "address_from",
+            "in": "query",
+            "description": "the passed Ethereum source address to return MEV transactions for.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "example": "0x039dc7c4a5769ca80c9e5c0cee5c8b287faeb3af"
+            }
+          },
+          {
+            "name": "address_to",
+            "in": "query",
+            "description": "the passed Ethereum destination address to return MEV transactions for.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "example": ""
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "allows pagination if there are more than 1000 rows returned, starting at page 1.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MEV transactions matching criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/mevTransaction"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      }
+    },
+    "/mevTransactionsSummary": {
+      "get": {
+        "tags": ["public"],
+        "summary": "returns an MEV summary for the originating address",
+        "description": "returns a summary of MEV transactions originating from the passed Ethereum wallet address and split by MEV type. Either address_from or address_to must be supplied",
+        "operationId": "mevTransactionsSummary",
+        "parameters": [
+          {
+            "name": "address_from",
+            "in": "query",
+            "description": "the passed Ethereum source address to return the MEV summary for.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "example": "0x00356ce6250f8489d23ff32742256ab5be9dd8d7"
+            }
+          },
+          {
+            "name": "address_to",
+            "in": "query",
+            "description": "the passed Ethereum destination address to return the MEV summary for.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "example": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MEV transactions matching criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/mevTransactionSummary"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "mevTransaction": {
+        "required": ["block_number", "mev_type", "tx_index"],
+        "type": "object",
+        "properties": {
+          "block_number": {
+            "type": "integer",
+            "description": "ethereum block number",
+            "format": "int64",
+            "example": 16824820
+          },
+          "tx_index": {
+            "type": "integer",
+            "description": "index of the transaction in a block",
+            "format": "int32",
+            "example": 1
+          },
+          "mev_type": {
+            "type": "string",
+            "description": "the type of MEV (sandwich, backrun, liquid, arb, frontrun, swap)",
+            "example": "frontrun"
+          },
+          "protocol": {
+            "type": "string",
+            "description": "swap protocol where relevant. curve, unknown, uniswap2, zerox, bancor, uniswap3, balancer1, compoundv2, aave or multiple if several protocols were used in the transaction which cannot be differentiated",
+            "nullable": true,
+            "example": "uniswap3"
+          },
+          "user_loss_usd": {
+            "type": "number",
+            "description": "estimated loss to user from MEV in USD",
+            "format": "double",
+            "nullable": true,
+            "example": -34.42
+          },
+          "extractor_profit_usd": {
+            "type": "number",
+            "description": "estimated profit to the extractor from MEV in USD",
+            "format": "double",
+            "nullable": true,
+            "example": 54.23
+          },
+          "user_swap_volume_usd": {
+            "type": "number",
+            "description": "the volume of swaps in the transaction in USD (where applicable) less the extractor_swap_volume_usd",
+            "format": "double",
+            "nullable": true,
+            "example": 1354.23
+          },
+          "user_swap_count": {
+            "type": "integer",
+            "description": "the number of swaps in the transaction (where applicable) less the extractor_swap_count",
+            "format": "int64",
+            "nullable": true,
+            "example": 2
+          },
+          "extractor_swap_volume_usd": {
+            "type": "number",
+            "description": "the volume of swaps related to extraction, such as the frontrun and backrun in a sandwich",
+            "format": "double",
+            "nullable": true,
+            "example": 554.23
+          },
+          "extractor_swap_count": {
+            "type": "integer",
+            "description": "the count of swaps related to extraction, such as the frontrun and backrun in a sandwich",
+            "format": "int64",
+            "nullable": true,
+            "example": 1
+          },
+          "imbalance": {
+            "type": "number",
+            "description": "sandwich imbalance percentage (frontrun, backrun only). A non-zero value indicates the sandwich was overweight on that side and needed to be rebalanced. backrun imbalance = (calculated back out - original back out) / calculated back out, frontrun imbalance = (calculated front in - original front in) / calculated front in",
+            "format": "double",
+            "nullable": true,
+            "example": 0.1442
+          },
+          "address_from": {
+            "type": "string",
+            "description": "transaction from address",
+            "nullable": true,
+            "example": "0x039dc7c4a5769ca80c9e5c0cee5c8b287faeb3af"
+          },
+          "address_to": {
+            "type": "string",
+            "description": "transaction to address",
+            "nullable": true,
+            "example": "0x039dc7c4a5769ca80c9e5c0cee5c8b287faeb3af"
+          },
+          "arrival_time_us": {
+            "type": "string",
+            "description": "time the transaction was first seen by our US node",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2023-03-03T11:52:19.444928Z"
+          },
+          "arrival_time_eu": {
+            "type": "string",
+            "description": "time the transaction was first seen by our European node",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2023-03-03T11:52:19.444928Z"
+          },
+          "arrival_time_as": {
+            "type": "string",
+            "description": "time the transaction was first seen by our Asian node",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2023-03-03T11:52:19.444928Z"
+          }
+        }
+      },
+      "mevTransactionSummary": {
+        "required": ["mev_type"],
+        "type": "object",
+        "properties": {
+          "mev_type": {
+            "type": "string",
+            "description": "the type of MEV (sandwich, swap)",
+            "example": "sandwich"
+          },
+          "sum_user_loss_usd": {
+            "type": "number",
+            "description": "total estimated loss to this account from MEV in USD",
+            "format": "double",
+            "nullable": true,
+            "example": -3434.42
+          },
+          "sum_user_swap_volume_usd": {
+            "type": "number",
+            "description": "total volume of swaps made by this account in USD (less any volume from extraction)",
+            "format": "double",
+            "nullable": true,
+            "example": 135423.23
+          },
+          "sum_user_swap_count": {
+            "type": "integer",
+            "description": "the number of swaps made by this account (less any volume from extraction)",
+            "format": "int64",
+            "nullable": true,
+            "example": 2
+          },
+          "sum_extractor_profit_usd": {
+            "type": "number",
+            "description": "total estimated profit made by this account from MEV in USD",
+            "format": "double",
+            "nullable": true
+          },
+          "sum_extractor_swap_volume_usd": {
+            "type": "number",
+            "description": "total volume of swaps made by this account in USD when extracting value",
+            "format": "double",
+            "nullable": true
+          },
+          "sum_extractor_swap_count": {
+            "type": "integer",
+            "description": "the total number of swaps made by this account when extracting value",
+            "format": "int64",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

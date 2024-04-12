@@ -1,4 +1,5 @@
 from dataclasses import asdict
+import logging
 import discord
 from discord import app_commands
 from discord.ext.commands import Bot
@@ -37,6 +38,7 @@ async def scan_address(
     address: str,
     privacy_preserving: app_commands.Choice[int] = None,
 ):
+    logging.info(f"Scanning {address} address")
     if privacy_preserving is None:
         privacy_preserving = app_commands.Choice(name="False", value=0)
     ephemeral = bool(privacy_preserving.value)

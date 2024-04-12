@@ -1,6 +1,7 @@
 import asyncio
-from typing import List
+import logging
 import httpx
+from typing import List
 from lib.latest_eth_block import get_latest_eth_block
 from ratelimit import limits, sleep_and_retry
 from lib.zero_mev_api.models import MevTransaction
@@ -11,6 +12,7 @@ MAX_CALLS_PER_SECOND = 5
 
 
 async def get_all_mev_transactions_related_to_address(address: str):
+    logging.info(f"Getting all mev transactions related to {address}")
     address_from_transaction, address_to_transaction = await asyncio.gather(
         get_paginated_mev_transactions_by_address_and_key(address, "address_from"),
         get_paginated_mev_transactions_by_address_and_key(address, "address_to"),
@@ -35,6 +37,7 @@ async def get_paginated_mev_transactions_by_address_and_key(
 
 
 async def get_all_mev_transactions_on_last_week() -> List[MevTransaction]:
+    logging.info(f"Getting all last week mev transactions")
     latest_eth_block_number = await get_latest_eth_block()
     eth_block_number_1_week_ago = (
         latest_eth_block_number - 46523
@@ -60,6 +63,9 @@ async def get_all_mev_transactions_on_last_week() -> List[MevTransaction]:
 async def fetch_all_mev_from_block(
     client: httpx.AsyncClient, block_number: int, count: int = 100
 ):
+    logging.info(
+        f"Fetching all mev transaction from block {block_number} to {block_number+count}"
+    )
     url = f"{API_BASE_URL}/mevBlock"
     params = {"block_number": block_number, "count": count}
     r = await client.get(url, params=params)

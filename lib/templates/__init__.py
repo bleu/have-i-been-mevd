@@ -64,7 +64,7 @@ class AddressScanTemplate(AbstractTemplate):
     def __footers_templates__() -> List[str]:
         return [
             "Stop Feeding the MEV bots!",
-            "Install MEV blocker: https://cow.fi/mev-blocker",
+            "Install MEV blocker: https://mevblocker.io/",
         ]
 
 

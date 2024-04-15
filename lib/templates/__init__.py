@@ -64,6 +64,40 @@ class AddressScanTemplate(AbstractTemplate):
     def __footers_templates__() -> List[str]:
         return [
             "Stop Feeding the MEV bots!",
+            "Install MEV blocker: https://mevblocker.io/",
+        ]
+
+
+class WeekOverviewTemplate(AbstractTemplate):
+    @staticmethod
+    def __title_template__() -> str:
+        return "Weekly MEV Report"
+
+    @staticmethod
+    def __stats_templates__() -> List[str]:
+        return [
+            {
+                "name": "Number of swaps MEV’d (frontruns and sandwiches)",
+                "value": "{{mev_swaps_number}}",
+            },
+            {
+                "name": "Amount of MEV extracted",
+                "value": "{{mev_extracted_amount}}",
+            },
+            {
+                "name": "Amount in MEV bot profits",
+                "value": "{{mev_profit_amount}}",
+            },
+            {
+                "name": "Total number of MEV victim addresses",
+                "value": "{{mev_victims_number}}",
+            },
+        ]
+
+    @staticmethod
+    def __footers_templates__() -> List[str]:
+        return [
+            "Stop Feeding the MEV bots!",
             "Install MEV blocker: https://cow.fi/mev-blocker",
         ]
 
@@ -74,6 +108,10 @@ data_formatter_configs = [
     {"key": "most_mev_protocol_name", "formatter": capitalize_first_letter},
     {"key": "mev_txs_length", "formatter": str},
     {"key": "address", "formatter": str},
+    {"key": "mev_swaps_number", "formatter": str},
+    {"key": "mev_extracted_amount", "formatter": format_currency},
+    {"key": "mev_profit_amount", "formatter": format_currency},
+    {"key": "mev_victims_number", "formatter": str},
 ]
 
 

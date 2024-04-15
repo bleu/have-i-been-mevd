@@ -2314,6 +2314,17 @@ files = [
 ]
 
 [[package]]
+name = "schedule"
+version = "1.2.1"
+description = "Job scheduling for humans."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "schedule-1.2.1-py2.py3-none-any.whl", hash = "sha256:14cdeb083a596aa1de6dc77639a1b2ac8bf6eaafa82b1c9279d3612823063d01"},
+    {file = "schedule-1.2.1.tar.gz", hash = "sha256:843bc0538b99c93f02b8b50e3e39886c06f2d003b24f48e1aa4cadfa3f341279"},
+]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -2663,4 +2674,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "25fa51f9c5ca1483b1b788c4bd3fe664aa203f1fbffa98fb65664bb5326d1ffd"
+content-hash = "6a93063932cd8212f3315b6ce172569d4d554ee13fd28e3178efd6bf2f2d8902"

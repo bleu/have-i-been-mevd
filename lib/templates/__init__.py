@@ -41,6 +41,21 @@ class AbstractTemplate(ABC):
             embed.add_field(name=name, value=value, inline=inline)
         return embed
 
+    @classmethod
+    def create_telegram_message(cls, data):
+        formatted_data = format_variables(data)
+        text_footer = "\n".join(cls.__footers_templates__())
+        title = pystache.render(cls.__title_template__(), formatted_data)
+        message = f"{title}\n\n\n"
+        for stat in cls.__stats_templates__():
+            name_template = stat["name"]
+            value_template = stat["value"]
+            name = pystache.render(name_template, formatted_data)
+            value = pystache.render(value_template, formatted_data)
+            message += f"{name}: {value}\n"
+        message += f"\n\n{text_footer}"
+        return message
+
 
 class AddressScanTemplate(AbstractTemplate):
     @staticmethod

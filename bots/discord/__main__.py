@@ -18,12 +18,12 @@ from lib.zero_mev_api.api import get_all_mev_transactions_on_last_week
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
-def send_to_channel(func):
+def send_to_channel(func, channel_id: int = int(os.getenv(f"DISCORD_CHANNEL_ID"))):
     """Print the runtime of the decorated function"""
 
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
-        channel = await bot_client.fetch_channel(int(os.getenv(f"DISCORD_CHANNEL_ID")))
+        channel = await bot_client.fetch_channel(channel_id)
         message = await func(*args, **kwargs)
 
         if message:
@@ -39,7 +39,7 @@ async def on_ready():
     logging.info(f"Synced {len(synced)} commands")
 
 
-@send_to_channel
+@send_to_channel()
 async def week_overview_report():
     logging.info("Overview week report starting")
     txs = await get_all_mev_transactions_on_last_week()

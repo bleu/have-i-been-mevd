@@ -20,14 +20,6 @@ class MostMevProtocol:
     total_amount: float
 
 
-@dataclass
-class OverviewData:
-    mev_swaps_number: int
-    mev_extracted_amount: float
-    mev_profit_amount: float
-    mev_victims_number: int
-
-
 def filter_mev_transactions_with_user_loss(
     mev_transactions: List[MevTransaction],
 ) -> List[MevTransaction]:
@@ -65,29 +57,15 @@ def find_largest_mev_transaction_protocol(
     return MostMevProtocol(name=max_type, total_amount=totals[max_type])
 
 
-def get_overview_data_from_mev_transactions(
-    mev_transactions: List[MevTransaction],
-) -> OverviewData:
-    mev_swaps_number = len(
-        [
-            tx.mev_type == "frontrun" or tx.mev_type == "sandwich"
-            for tx in mev_transactions
-        ]
-    )
-    mev_extracted_amount = (
-        sum([tx.user_loss_usd for tx in mev_transactions if tx.user_loss_usd])
-        * -1  # user loss usd is negative
-    )
+def get_total_extracted_amount(mev_transactions: List[MevTransaction]) -> float:
+    return sum([tx.user_loss_usd * -1 for tx in mev_transactions if tx.user_loss_usd])
 
-    mev_profit_amount = sum(
+
+def get_total_profit_amount(mev_transactions: List[MevTransaction]) -> float:
+    return sum(
         [tx.extractor_profit_usd for tx in mev_transactions if tx.extractor_profit_usd]
     )
 
-    mev_victims_number = len(set([tx.address_from for tx in mev_transactions]))
 
-    return OverviewData(
-        mev_swaps_number=mev_swaps_number,
-        mev_extracted_amount=mev_extracted_amount,
-        mev_profit_amount=mev_profit_amount,
-        mev_victims_number=mev_victims_number,
-    )
+def get_total_victims_number(mev_transactions: List[MevTransaction]) -> int:
+    return len(set([tx.address_from for tx in mev_transactions]))

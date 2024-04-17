@@ -20,9 +20,11 @@ class AbstractTemplate(ABC):
         pass
 
     @staticmethod
-    @abstractmethod
     def __footers_templates__() -> List[str]:
-        pass
+        return [
+            "Stop Feeding the MEV bots!",
+            "Install MEV blocker: https://mevblocker.io/",
+        ]
 
     @classmethod
     def create_discord_embed(cls, data, inline=False):
@@ -75,45 +77,64 @@ class AddressScanTemplate(AbstractTemplate):
             },
         ]
 
-    @staticmethod
-    def __footers_templates__() -> List[str]:
-        return [
-            "Stop Feeding the MEV bots!",
-            "Install MEV blocker: https://mevblocker.io/",
-        ]
 
-
-class WeekOverviewTemplate(AbstractTemplate):
+class WeekOverviewNumberOfSwaps(AbstractTemplate):
     @staticmethod
     def __title_template__() -> str:
-        return "Weekly MEV Report"
+        return "Last Week MEV Swaps Report"
 
     @staticmethod
     def __stats_templates__() -> List[dict[str, str]]:
         return [
             {
-                "name": "Number of swaps MEV’d (frontruns and sandwiches)",
+                "name": "Number of swaps MEV’d",
                 "value": "{{mev_swaps_number}}",
             },
+        ]
+
+
+class WeekOverviewExtractedAmount(AbstractTemplate):
+    @staticmethod
+    def __title_template__() -> str:
+        return "Last Week MEV Swaps Report"
+
+    @staticmethod
+    def __stats_templates__() -> List[dict[str, str]]:
+        return [
             {
-                "name": "Amount of MEV extracted",
+                "name": "Total Extracted Amount",
                 "value": "{{mev_extracted_amount}}",
             },
+        ]
+
+
+class WeekOverviewProfitAmount(AbstractTemplate):
+    @staticmethod
+    def __title_template__() -> str:
+        return "Last Week MEV Swaps Report"
+
+    @staticmethod
+    def __stats_templates__() -> List[dict[str, str]]:
+        return [
             {
-                "name": "Amount in MEV bot profits",
+                "name": "Total MEV Bots profit",
                 "value": "{{mev_profit_amount}}",
             },
+        ]
+
+
+class WeekOverviewVictims(AbstractTemplate):
+    @staticmethod
+    def __title_template__() -> str:
+        return "Last Week MEV Victims Report"
+
+    @staticmethod
+    def __stats_templates__() -> List[dict[str, str]]:
+        return [
             {
                 "name": "Total number of MEV victim addresses",
                 "value": "{{mev_victims_number}}",
             },
-        ]
-
-    @staticmethod
-    def __footers_templates__() -> List[str]:
-        return [
-            "Stop Feeding the MEV bots!",
-            "Install MEV blocker: https://cow.fi/mev-blocker",
         ]
 
 

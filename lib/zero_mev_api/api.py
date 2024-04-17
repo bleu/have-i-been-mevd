@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import httpx
-from typing import List
+from typing import Dict, List, Any
 from lib.latest_eth_block import get_latest_eth_block
 from ratelimit import limits, sleep_and_retry
 from lib.zero_mev_api.models import MevTransaction
@@ -40,7 +40,7 @@ async def get_all_mev_transactions_on_last_week() -> List[MevTransaction]:
     logging.info(f"Getting all last week mev transactions")
     latest_eth_block_number = await get_latest_eth_block()
     eth_block_number_1_week_ago = (
-        latest_eth_block_number - 46523
+        latest_eth_block_number - 4652
     )  # 1 week approx 46523 blocks
 
     tasks = []
@@ -79,5 +79,5 @@ async def bounded_fetch(
     count: int = 100,
 ):
     async with sem:
-        data = await fetch_all_mev_from_block(client, block_number, count)
+        data = await fetch_all_mev_from_block(client, block_number, count)  # type: ignore
         return data

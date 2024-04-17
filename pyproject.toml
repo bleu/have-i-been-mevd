@@ -20,6 +20,18 @@ python-telegram-bot = "^21.1.1"
 
 [tool.poetry.group.dev.dependencies]
 datamodel-code-generator = "^0.25.5"
+pyright = "^1.1.359"
+
+[tool.pyright]
+# NOTE: these paths are excluded but not IGNORED. They are still included in the analysis if they are referenced by source files that are not excluded. 
+exclude = [
+    "**/__pycache__",
+    "lib/zero_mev_api/models.py",
+    ".venv/",
+]
+reportIncompatibleVariableOverride = 'warning'
+strictParameterNoneValue = false
+
 
 [build-system]
 requires = ["poetry-core"]

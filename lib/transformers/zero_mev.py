@@ -38,8 +38,8 @@ def get_scan_address_data_from_mev_transactions(
     mev_transactions: List[MevTransaction], address: str
 ) -> ScanAddressData:
     for tx in mev_transactions:
-        tx.user_loss_usd = tx.user_loss_usd * -1  # user loss usd is negative
-    total_amount_usd = sum([tx.user_loss_usd for tx in mev_transactions])
+        tx.user_loss_usd = tx.user_loss_usd * -1  # type: ignore user loss usd is negative
+    total_amount_usd = sum([tx.user_loss_usd for tx in mev_transactions])  # type: ignore
     most_mev_protocol = find_largest_mev_transaction_protocol(mev_transactions)
     return ScanAddressData(
         address=address,
@@ -58,9 +58,9 @@ def find_largest_mev_transaction_protocol(
 
     for tx in mev_transaction_with_protocol:
         type_key = tx.protocol
-        totals[type_key] += tx.user_loss_usd
+        totals[type_key] += tx.user_loss_usd  # type: ignore
 
-    max_type = max(totals, key=totals.get)
+    max_type = max(totals, key=totals.get)  # type: ignore
 
     return MostMevProtocol(name=max_type, total_amount=totals[max_type])
 

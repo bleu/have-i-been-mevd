@@ -16,7 +16,7 @@ class AbstractTemplate(ABC):
 
     @staticmethod
     @abstractmethod
-    def __stats_templates__() -> List[str]:
+    def __stats_templates__() -> List[dict[str, str]]:
         pass
 
     @staticmethod
@@ -63,7 +63,7 @@ class AddressScanTemplate(AbstractTemplate):
         return "MEV Receipt for {{address}}"
 
     @staticmethod
-    def __stats_templates__() -> List[str]:
+    def __stats_templates__() -> List[dict[str, str]]:
         return [
             {
                 "name": "MEV Suffered",
@@ -89,7 +89,7 @@ class WeekOverviewTemplate(AbstractTemplate):
         return "Weekly MEV Report"
 
     @staticmethod
-    def __stats_templates__() -> List[str]:
+    def __stats_templates__() -> List[dict[str, str]]:
         return [
             {
                 "name": "Number of swaps MEV’d (frontruns and sandwiches)",

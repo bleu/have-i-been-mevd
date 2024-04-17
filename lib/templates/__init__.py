@@ -81,7 +81,7 @@ class AddressScanTemplate(AbstractTemplate):
 class WeekOverviewNumberOfSwaps(AbstractTemplate):
     @staticmethod
     def __title_template__() -> str:
-        return "Last Week MEV Swaps Report"
+        return "Last Week MEV Stat"
 
     @staticmethod
     def __stats_templates__() -> List[dict[str, str]]:
@@ -96,7 +96,7 @@ class WeekOverviewNumberOfSwaps(AbstractTemplate):
 class WeekOverviewExtractedAmount(AbstractTemplate):
     @staticmethod
     def __title_template__() -> str:
-        return "Last Week MEV Swaps Report"
+        return "Last Week MEV Stat"
 
     @staticmethod
     def __stats_templates__() -> List[dict[str, str]]:
@@ -111,7 +111,7 @@ class WeekOverviewExtractedAmount(AbstractTemplate):
 class WeekOverviewProfitAmount(AbstractTemplate):
     @staticmethod
     def __title_template__() -> str:
-        return "Last Week MEV Swaps Report"
+        return "Last Week MEV Stat"
 
     @staticmethod
     def __stats_templates__() -> List[dict[str, str]]:
@@ -126,7 +126,7 @@ class WeekOverviewProfitAmount(AbstractTemplate):
 class WeekOverviewVictims(AbstractTemplate):
     @staticmethod
     def __title_template__() -> str:
-        return "Last Week MEV Victims Report"
+        return "Last Week MEV Stat"
 
     @staticmethod
     def __stats_templates__() -> List[dict[str, str]]:

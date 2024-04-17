@@ -1,28 +1,27 @@
 import asyncio
 import logging
 import httpx
-from typing import Dict, List, Any
+import pandas as pd
 from lib.latest_eth_block import get_latest_eth_block
 from ratelimit import limits, sleep_and_retry
-from lib.zero_mev_api.models import MevTransaction
 
 
 API_BASE_URL = "https://data.zeromev.org/v1"
 MAX_CALLS_PER_SECOND = 5
 
 
-async def get_all_mev_transactions_related_to_address(address: str):
+async def get_all_mev_transactions_related_to_address(address: str) -> pd.DataFrame:
     logging.info(f"Getting all mev transactions related to {address}")
     address_from_transaction, address_to_transaction = await asyncio.gather(
         get_paginated_mev_transactions_by_address_and_key(address, "address_from"),
         get_paginated_mev_transactions_by_address_and_key(address, "address_to"),
     )
-    return [*address_from_transaction, *address_to_transaction]
+    return pd.concat([address_from_transaction, address_to_transaction])
 
 
 async def get_paginated_mev_transactions_by_address_and_key(
     address: str, params_address_key: str
-) -> List[MevTransaction]:
+) -> pd.DataFrame:
     params = {params_address_key: address, "page": 1}
     all_data = []
     while True:
@@ -33,14 +32,14 @@ async def get_paginated_mev_transactions_by_address_and_key(
         if not data or len(data) < 1000:
             break
         params["page"] += 1
-    return [MevTransaction(**d) for d in all_data]
+    return pd.DataFrame(data=all_data)
 
 
-async def get_all_mev_transactions_on_last_week() -> List[MevTransaction]:
+async def get_all_mev_transactions_on_last_week() -> pd.DataFrame:
     logging.info(f"Getting all last week mev transactions")
     latest_eth_block_number = await get_latest_eth_block()
     eth_block_number_1_week_ago = (
-        latest_eth_block_number - 4652
+        latest_eth_block_number - 46523
     )  # 1 week approx 46523 blocks
 
     tasks = []
@@ -55,7 +54,7 @@ async def get_all_mev_transactions_on_last_week() -> List[MevTransaction]:
                 await asyncio.sleep(1)
 
         responses = await asyncio.gather(*tasks)
-        return [MevTransaction(**d) for response in responses for d in response]
+        return pd.DataFrame(responses)
 
 
 @sleep_and_retry

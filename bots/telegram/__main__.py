@@ -6,7 +6,7 @@ from telegram.ext import CommandHandler, CallbackContext
 
 from lib.templates import AddressScanTemplate
 from lib.transformers.zero_mev import (
-    filter_mev_transactions_with_user_loss,
+    minimal_preporcessing,
     get_scan_address_data_from_mev_transactions,
 )
 from lib.w3 import get_web3_provider
@@ -30,8 +30,8 @@ async def scan_address(update: Update, context: CallbackContext):
             return
 
         mev_txs = await get_all_mev_transactions_related_to_address(address)
-        mev_txs_with_user_loss = filter_mev_transactions_with_user_loss(mev_txs)
-        if not len(mev_txs_with_user_loss):
+        mev_txs_with_user_loss = minimal_preporcessing(mev_txs)
+        if mev_txs_with_user_loss.empty:
             await update.message.reply_text(
                 "No MEV transactions found for the provided address."
             )
@@ -63,7 +63,7 @@ async def help_command(update: Update, context: CallbackContext):
 
 
 def main():
-    application = Application.builder().token(os.getenv("TELEGRAM_TOKEN")).build()
+    application = Application.builder().token(os.getenv("TELEGRAM_TOKEN", "")).build()
 
     application.add_handler(CommandHandler("scan_address", scan_address))
     application.add_handler(CommandHandler("help", help_command))

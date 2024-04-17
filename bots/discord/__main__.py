@@ -13,12 +13,8 @@ from lib.templates import (
     WeekOverviewVictims,
     WeekOverviewProfitAmount,
 )
-from lib.transformers.zero_mev import (
-    filter_mev_transactions_with_user_loss,
-    get_total_profit_amount,
-    get_total_extracted_amount,
-    get_total_victims_number,
-)
+
+from lib.transformers.zero_mev import minimal_preporcessing
 from lib.zero_mev_api.api import get_all_mev_transactions_on_last_week
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
@@ -49,8 +45,8 @@ async def on_ready():
 async def swaps_report():
     logging.info("Overview week swaps report starting")
     txs = await get_all_mev_transactions_on_last_week()
-    filtered_txs = filter_mev_transactions_with_user_loss(txs)
-    mev_swaps_number = len(filtered_txs)
+    txs_processed = minimal_preporcessing(txs)
+    mev_swaps_number = len(txs_processed)
     embed = WeekOverviewNumberOfSwaps.create_discord_embed(
         {
             "mev_swaps_number": mev_swaps_number,
@@ -63,8 +59,8 @@ async def swaps_report():
 async def extracted_amount_report():
     logging.info("Overview week extracted amount report starting")
     txs = await get_all_mev_transactions_on_last_week()
-    filtered_txs = filter_mev_transactions_with_user_loss(txs)
-    extracted_amount = get_total_extracted_amount(filtered_txs)
+    txs_processed = minimal_preporcessing(txs)
+    extracted_amount = txs_processed["user_loss_usd"].sum()
     embed = WeekOverviewExtractedAmount.create_discord_embed(
         {"mev_extracted_amount": extracted_amount}
     )
@@ -75,8 +71,8 @@ async def extracted_amount_report():
 async def profit_amount_report():
     logging.info("Overview week profit amount report starting")
     txs = await get_all_mev_transactions_on_last_week()
-    filtered_txs = filter_mev_transactions_with_user_loss(txs)
-    profit_amount = get_total_profit_amount(filtered_txs)
+    txs_processed = minimal_preporcessing(txs)
+    profit_amount = txs_processed["extractor_profit_usd"].sum()
     embed = WeekOverviewProfitAmount.create_discord_embed(
         {"mev_profit_amount": profit_amount}
     )
@@ -87,8 +83,8 @@ async def profit_amount_report():
 async def victims_report():
     logging.info("Overview week victims report starting")
     txs = await get_all_mev_transactions_on_last_week()
-    filtered_txs = filter_mev_transactions_with_user_loss(txs)
-    victims_number = get_total_victims_number(filtered_txs)
+    txs_processed = minimal_preporcessing(txs)
+    victims_number = txs_processed["address_from"].unique().size
     embed = WeekOverviewVictims.create_discord_embed(
         {"mev_victims_number": victims_number}
     )

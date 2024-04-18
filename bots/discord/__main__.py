@@ -47,12 +47,21 @@ async def swaps_report():
     txs = await get_all_mev_transactions_on_last_week()
     txs_processed = minimal_preporcessing(txs)
     mev_swaps_number = len(txs_processed)
-    embed = WeekOverviewNumberOfSwaps.create_discord_embed(
+    mev_swaps_per_type = (
+        txs_processed.groupby("mev_type")
+        .tx_index.count()
+        .sort_values(
+            ascending=False,
+        )
+    )
+
+    return WeekOverviewNumberOfSwaps.create_discord_embed_with_image(
         {
             "mev_swaps_number": mev_swaps_number,
-        }
+        },
+        mev_swaps_per_type.index.tolist(),
+        mev_swaps_per_type.values.tolist(),
     )
-    return dict(embed=embed)
 
 
 @send_to_channel

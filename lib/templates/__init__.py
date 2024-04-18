@@ -2,10 +2,33 @@ from typing import List
 import discord
 import pystache
 from abc import ABC, abstractmethod
+from lib.templates.images import generate_image
 from lib.templates.utils import (
     capitalize_first_letter,
     format_currency,
 )
+
+data_formatter_configs = [
+    {"key": "total_amount_usd", "formatter": format_currency},
+    {"key": "most_mev_protocol_usd_amount", "formatter": format_currency},
+    {"key": "most_mev_protocol_name", "formatter": capitalize_first_letter},
+    {"key": "mev_txs_length", "formatter": str},
+    {"key": "address", "formatter": str},
+    {"key": "mev_swaps_number", "formatter": str},
+    {"key": "mev_extracted_amount", "formatter": format_currency},
+    {"key": "mev_profit_amount", "formatter": format_currency},
+    {"key": "mev_victims_number", "formatter": str},
+]
+
+
+def format_variables(data):
+    data = {
+        config["key"]: config["formatter"](data[config["key"]])  # type: ignore
+        for config in data_formatter_configs  # type: ignore
+        if data.get(config["key"])
+    }
+
+    return data
 
 
 class AbstractTemplate(ABC):
@@ -58,6 +81,21 @@ class AbstractTemplate(ABC):
         message += f"\n\n{text_footer}"
         return message
 
+    @staticmethod
+    def generate_image(x: List[str], y: List[int | float]):
+        raise NotImplementedError(
+            "This method should be implemented in the child class."
+        )
+
+    @classmethod
+    def create_discord_embed_with_image(cls, data, x_image, y_image):
+        image = cls.generate_image(x_image, y_image)
+        embed = cls.create_discord_embed(data)
+        filename = "graph.png"
+        discord_file = discord.File(image, filename=filename)
+        embed.set_image(url=f"attachment://{filename}")
+        return dict(embed=embed, file=discord_file)
+
 
 class AddressScanTemplate(AbstractTemplate):
     @staticmethod
@@ -91,6 +129,19 @@ class WeekOverviewNumberOfSwaps(AbstractTemplate):
                 "value": "{{mev_swaps_number}}",
             },
         ]
+
+    @staticmethod
+    def generate_image(x: List[str], y: List[int | float]):
+        title = "Last Week MEV Swaps per type"
+        xlabel = "MEV Type"
+        ylabel = "Number of Swaps"
+        return generate_image(
+            x=x,
+            y=y,
+            title=title,
+            xlabel=xlabel,
+            ylabel=ylabel,
+        )
 
 
 class WeekOverviewExtractedAmount(AbstractTemplate):
@@ -136,26 +187,3 @@ class WeekOverviewVictims(AbstractTemplate):
                 "value": "{{mev_victims_number}}",
             },
         ]
-
-
-data_formatter_configs = [
-    {"key": "total_amount_usd", "formatter": format_currency},
-    {"key": "most_mev_protocol_usd_amount", "formatter": format_currency},
-    {"key": "most_mev_protocol_name", "formatter": capitalize_first_letter},
-    {"key": "mev_txs_length", "formatter": str},
-    {"key": "address", "formatter": str},
-    {"key": "mev_swaps_number", "formatter": str},
-    {"key": "mev_extracted_amount", "formatter": format_currency},
-    {"key": "mev_profit_amount", "formatter": format_currency},
-    {"key": "mev_victims_number", "formatter": str},
-]
-
-
-def format_variables(data):
-    data = {
-        config["key"]: config["formatter"](data[config["key"]])
-        for config in data_formatter_configs
-        if data.get(config["key"])
-    }
-
-    return data

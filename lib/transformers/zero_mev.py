@@ -16,7 +16,7 @@ class ScanAddressData:
 
 
 def minimal_preporcessing(mev_transactions: pd.DataFrame) -> pd.DataFrame:
-    mev_transactions["user_loss_usd"] = mev_transactions["user_loss_usd"] * -1
+    mev_transactions["user_loss_usd"] = abs(mev_transactions["user_loss_usd"])
     mev_transactions.dropna(subset=["user_loss_usd"], inplace=True)
     return mev_transactions
 

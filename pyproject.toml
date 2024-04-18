@@ -17,6 +17,8 @@ ratelimit = "^2.2.1"
 schedule = "^1.2.1"
 python-telegram-bot = "^21.1.1"
 pandas = "^2.2.2"
+seaborn = "^0.13.2"
+matplotlib = "^3.8.4"
 
 
 [tool.poetry.group.dev.dependencies]

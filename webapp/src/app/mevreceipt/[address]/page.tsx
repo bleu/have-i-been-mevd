@@ -1,8 +1,9 @@
 "use client";
 
+import { Spinner } from "#/components/Spinner";
 import { truncateAddress } from "#/utils/truncateAddress";
 import { IAddressMevData, scanAddressMEV } from "#/utils/zeroMevApi";
-import { Button, Spinner, capitalize, formatNumber } from "@bleu-fi/ui";
+import { Button, capitalize, formatNumber } from "@bleu-fi/ui";
 import { HomeIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -24,7 +25,13 @@ export default function Page({
   }, [params.address]);
 
   if (!mevData) {
-    return <Spinner />;
+    return (
+      <div className="flex w-full justify-center h-full">
+        <div className="flex flex-col items-center gap-8 justify-center">
+          <Spinner />
+        </div>
+      </div>
+    );
   }
 
   return (

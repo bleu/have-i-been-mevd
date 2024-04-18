@@ -39,7 +39,7 @@ async def get_all_mev_transactions_on_last_week() -> pd.DataFrame:
     logging.info(f"Getting all last week mev transactions")
     latest_eth_block_number = await get_latest_eth_block()
     eth_block_number_1_week_ago = (
-        latest_eth_block_number - 462
+        latest_eth_block_number - 46523
     )  # 1 week approx 46523 blocks
 
     tasks = []

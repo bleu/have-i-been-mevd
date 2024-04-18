@@ -3,21 +3,26 @@ import functools
 import os
 import logging
 import schedule
-
+from datetime import datetime
 
 from bots.discord.commands import bot as bot_client
-from lib.schedule import schedule_module
-from lib.templates import (
-    WeekOverviewExtractedAmount,
-    WeekOverviewNumberOfSwaps,
-    WeekOverviewVictims,
-    WeekOverviewProfitAmount,
+from bots.discord.reports import (
+    extracted_amount_report,
+    profit_amount_report,
+    swaps_report,
+    victims_report,
 )
-
-from lib.transformers.zero_mev import minimal_preporcessing
-from lib.zero_mev_api.api import get_all_mev_transactions_on_last_week
+from lib.schedule import schedule_module
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
+
+WEEKLY_REPORT_REFERENCE = datetime(2024, 1, 1)
+REPORTS_LIST = [
+    swaps_report,
+    extracted_amount_report,
+    profit_amount_report,
+    victims_report,
+]
 
 
 def send_to_channel(func, channel_id: int = int(os.getenv(f"DISCORD_CHANNEL_ID", 0))):
@@ -42,62 +47,14 @@ async def on_ready():
 
 
 @send_to_channel
-async def swaps_report():
-    logging.info("Overview week swaps report starting")
-    txs = await get_all_mev_transactions_on_last_week()
-    txs_processed = minimal_preporcessing(txs)
-    mev_swaps_number = len(txs_processed)
-    mev_swaps_per_type = (
-        txs_processed.groupby("mev_type")
-        .tx_index.count()
-        .sort_values(
-            ascending=False,
-        )
-    )
+async def weekly_report():
+    logging.info("Weekly report starting")
+    now = datetime.now()
+    delta = now - WEEKLY_REPORT_REFERENCE
+    weeks_since_start = delta.days // 7
 
-    return WeekOverviewNumberOfSwaps.create_discord_embed_with_image(
-        {
-            "mev_swaps_number": mev_swaps_number,
-        },
-        mev_swaps_per_type.index.tolist(),
-        mev_swaps_per_type.values.tolist(),
-    )
-
-
-@send_to_channel
-async def extracted_amount_report():
-    logging.info("Overview week extracted amount report starting")
-    txs = await get_all_mev_transactions_on_last_week()
-    txs_processed = minimal_preporcessing(txs)
-    extracted_amount = txs_processed["user_loss_usd"].sum()
-    embed = WeekOverviewExtractedAmount.create_discord_embed(
-        {"mev_extracted_amount": extracted_amount}
-    )
-    return dict(embed=embed)
-
-
-@send_to_channel
-async def profit_amount_report():
-    logging.info("Overview week profit amount report starting")
-    txs = await get_all_mev_transactions_on_last_week()
-    txs_processed = minimal_preporcessing(txs)
-    profit_amount = txs_processed["extractor_profit_usd"].sum()
-    embed = WeekOverviewProfitAmount.create_discord_embed(
-        {"mev_profit_amount": profit_amount}
-    )
-    return dict(embed=embed)
-
-
-@send_to_channel
-async def victims_report():
-    logging.info("Overview week victims report starting")
-    txs = await get_all_mev_transactions_on_last_week()
-    txs_processed = minimal_preporcessing(txs)
-    victims_number = txs_processed["address_from"].unique().size
-    embed = WeekOverviewVictims.create_discord_embed(
-        {"mev_victims_number": victims_number}
-    )
-    return dict(embed=embed)
+    task_index = weeks_since_start % len(REPORTS_LIST)
+    return await REPORTS_LIST[task_index]()
 
 
 async def start_discord_bot():

@@ -63,7 +63,7 @@ async def help_command(update: Update, context: CallbackContext):
 
 
 def main():
-    application = Application.builder().token(os.getenv("TELEGRAM_TOKEN", "")).build()
+    application = Application.builder().token(os.getenv("TELEGRAM_TOKEN")).build()  # type: ignore
 
     application.add_handler(CommandHandler("scan_address", scan_address))
     application.add_handler(CommandHandler("help", help_command))

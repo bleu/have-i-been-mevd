@@ -1,5 +1,10 @@
+from collections import defaultdict
 from dataclasses import dataclass
+from typing import List
 import pandas as pd
+
+from lib.zero_mev_api.models import MevTransaction
+
 
 @dataclass
 class ScanAddressData:
@@ -10,7 +15,7 @@ class ScanAddressData:
     most_mev_protocol_usd_amount: float
 
 
-def minimal_preporcessing(mev_transactions: pd.DataFrame) -> pd.DataFrame:
+def preporcess(mev_transactions: pd.DataFrame) -> pd.DataFrame:
     mev_transactions["user_loss_usd"] = abs(mev_transactions["user_loss_usd"])
     mev_transactions.dropna(subset=["user_loss_usd"], inplace=True)
     return mev_transactions

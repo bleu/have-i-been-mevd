@@ -25,7 +25,7 @@ REPORTS_LIST = [
 ]
 
 
-def send_to_channel(func, channel_id: int = int(os.getenv(f"DISCORD_CHANNEL_ID", 0))):
+def send_to_channel(func, channel_id: int = int(os.getenv(f"DISCORD_CHANNEL_ID"))): # type: ignore
     """Print the runtime of the decorated function"""
 
     @functools.wraps(func)
@@ -58,7 +58,7 @@ async def weekly_report():
 
 
 async def start_discord_bot():
-    await bot_client.start(os.getenv(f"DISCORD_BOT_TOKEN", ""))
+    await bot_client.start(os.getenv(f"DISCORD_BOT_TOKEN"))  # type: ignore
 
 
 async def run_schedule():

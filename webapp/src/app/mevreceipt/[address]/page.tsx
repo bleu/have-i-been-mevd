@@ -1,10 +1,11 @@
 "use client";
 
 import { Spinner } from "#/components/Spinner";
+import { TwitterShareButton } from "#/components/TwitterShareButton";
 import { truncateAddress } from "#/utils/truncateAddress";
 import { IAddressMevData, scanAddressMEV } from "#/utils/zeroMevApi";
 import { Button, capitalize, formatNumber } from "@bleu-fi/ui";
-import { HomeIcon } from "@radix-ui/react-icons";
+import { HomeIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Address } from "viem";
@@ -34,6 +35,16 @@ export default function Page({
     );
   }
 
+  const totalAmountUsdFormatted = `$ ${formatNumber(mevData.totalAmountUsd)}`;
+
+  const protocolNameFormatted = `${capitalize(mevData.mostMevProtocolName)}`;
+
+  const mostMevProtocolUsdAmountFormatted = `$ ${formatNumber(
+    mevData.mostMevProtocolUsdAmount
+  )}`;
+
+  const twitterShareText = `I found out that I have received ${totalAmountUsdFormatted} on ${mevData.mevTxsLength} transactions. Most MEV from ${protocolNameFormatted} (${mostMevProtocolUsdAmountFormatted}).\n\nStop feeding the MEV bots. Install MEV Blocker: https://mevblocker.io\n\n`;
+
   return (
     <div className="flex w-full justify-center h-full">
       <div className="flex flex-col items-center gap-8 justify-center">
@@ -44,27 +55,31 @@ export default function Page({
         <div className="flex flex-col gap-4 text-2xl">
           <div>
             Total amount:{" "}
-            <b className="text-highlight">
-              ${formatNumber(mevData.totalAmountUsd)} USD
-            </b>{" "}
-            (on {mevData.mevTxsLength} transactions)
+            <b className="text-highlight">{totalAmountUsdFormatted}</b> (on{" "}
+            {mevData.mevTxsLength} transactions)
           </div>
           <div>
             Most MEV from:{" "}
-            <i className="text-accent">
-              {capitalize(mevData.mostMevProtocolName)}
-            </i>{" "}
-            ($
-            {formatNumber(mevData.mostMevProtocolUsdAmount)} USD)
+            <i className="text-accent">{protocolNameFormatted}</i> (
+            {mostMevProtocolUsdAmountFormatted})
           </div>
-          <Link href="/" className="w-full">
-            <Button
+          <div className="flex flex-row w-full justify-between gap-5 text-xl">
+            <Link href="/" className="w-full">
+              <Button
+                type="button"
+                className="w-full flex items-center gap-3 justify-self-start py-5"
+              >
+                <HomeIcon className="size-6" /> Scan another address
+              </Button>
+            </Link>
+            <TwitterShareButton
               type="button"
-              className="w-full flex items-center gap-3 justify-self-start text-xl py-5"
+              className="w-full flex items-center gap-3 justify-self-start py-5"
+              text={twitterShareText}
             >
-              <HomeIcon className="size-6" /> Scan another address
-            </Button>
-          </Link>
+              <TwitterLogoIcon className="size-6" /> Share
+            </TwitterShareButton>
+          </div>
         </div>
       </div>
     </div>

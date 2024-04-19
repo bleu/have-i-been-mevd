@@ -12,6 +12,7 @@ import { WagmiProvider } from "wagmi";
 import { config } from "#/wagmi/client";
 import { RainbowKitProvider, Theme, darkTheme } from "@rainbow-me/rainbowkit";
 import { mainnet } from "viem/chains";
+import { COLORS } from "#/utils/colors";
 
 export function RootLayout({ children }: React.PropsWithChildren) {
   const queryClient = new QueryClient();
@@ -40,19 +41,17 @@ export function RootLayout({ children }: React.PropsWithChildren) {
 
 const CustomTheme = merge(darkTheme(), {
   colors: {
-    accentColor: "accent",
-    accentColorForeground: "accent-foreground",
-    closeButtonBackground: "destructive",
-    connectButtonText: "primary",
-    closeButton: "destructive",
-    connectButtonTextError: "destructive",
-    connectionIndicator: "primary",
-    generalBorder: "border",
-    menuItemBackground: "white",
-    modalBackground: "foreground",
-    modalBorder: "border-background",
-    modalText: "background",
-    modalTextSecondary: "info",
+    accentColor: COLORS.accent,
+    accentColorForeground: COLORS["accent-foreground"],
+    closeButtonBackground: COLORS.background,
+    closeButton: COLORS.destructive,
+    connectButtonTextError: COLORS.destructive,
+    generalBorder: COLORS.border,
+    modalBackground: COLORS.background,
+    modalBorder: COLORS.border,
+    modalText: COLORS.foreground,
+    modalTextSecondary: COLORS.primary,
+    selectedOptionBorder: COLORS.border,
   },
   fonts: {
     body: "var(--font-family-sans)",

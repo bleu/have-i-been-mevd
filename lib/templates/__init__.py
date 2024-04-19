@@ -34,16 +34,16 @@ def format_variables(data):
 class AbstractTemplate(ABC):
     @staticmethod
     @abstractmethod
-    def __title_template__() -> str:
+    def _title_template() -> str:
         pass
 
     @staticmethod
     @abstractmethod
-    def __stats_templates__() -> List[dict[str, str]]:
+    def _stats_templates() -> List[dict[str, str]]:
         pass
 
     @staticmethod
-    def __footers_templates__() -> List[str]:
+    def _footers_templates() -> List[str]:
         return [
             "Stop Feeding the MEV bots!",
             "Install MEV blocker: https://mevblocker.io/",
@@ -52,13 +52,13 @@ class AbstractTemplate(ABC):
     @classmethod
     def create_discord_embed(cls, data, inline=False):
         formatted_data = format_variables(data)
-        text_footer = "\n".join(cls.__footers_templates__())
+        text_footer = "\n".join(cls._footers_templates())
         embed = discord.Embed(
-            title=pystache.render(cls.__title_template__(), formatted_data),
+            title=pystache.render(cls._title_template(), formatted_data),
         )
 
         embed.set_footer(text=pystache.render(text_footer, formatted_data))
-        for stat in cls.__stats_templates__():
+        for stat in cls._stats_templates():
             name_template = stat["name"]
             value_template = stat["value"]
             name = pystache.render(name_template, formatted_data)
@@ -69,10 +69,10 @@ class AbstractTemplate(ABC):
     @classmethod
     def create_telegram_message(cls, data):
         formatted_data = format_variables(data)
-        text_footer = "\n".join(cls.__footers_templates__())
-        title = pystache.render(cls.__title_template__(), formatted_data)
+        text_footer = "\n".join(cls._footers_templates())
+        title = pystache.render(cls._title_template(), formatted_data)
         message = f"{title}\n\n\n"
-        for stat in cls.__stats_templates__():
+        for stat in cls._stats_templates():
             name_template = stat["name"]
             value_template = stat["value"]
             name = pystache.render(name_template, formatted_data)
@@ -99,11 +99,11 @@ class AbstractTemplate(ABC):
 
 class AddressScanTemplate(AbstractTemplate):
     @staticmethod
-    def __title_template__() -> str:
+    def _title_template() -> str:
         return "MEV Receipt for {{address}}"
 
     @staticmethod
-    def __stats_templates__() -> List[dict[str, str]]:
+    def _stats_templates() -> List[dict[str, str]]:
         return [
             {
                 "name": "MEV Suffered",
@@ -118,11 +118,11 @@ class AddressScanTemplate(AbstractTemplate):
 
 class WeekOverviewNumberOfSwaps(AbstractTemplate):
     @staticmethod
-    def __title_template__() -> str:
+    def _title_template() -> str:
         return "Last Week MEV Stat"
 
     @staticmethod
-    def __stats_templates__() -> List[dict[str, str]]:
+    def _stats_templates() -> List[dict[str, str]]:
         return [
             {
                 "name": "Number of swaps MEV’d",
@@ -146,11 +146,11 @@ class WeekOverviewNumberOfSwaps(AbstractTemplate):
 
 class WeekOverviewExtractedAmount(AbstractTemplate):
     @staticmethod
-    def __title_template__() -> str:
+    def _title_template() -> str:
         return "Last Week MEV Stat"
 
     @staticmethod
-    def __stats_templates__() -> List[dict[str, str]]:
+    def _stats_templates() -> List[dict[str, str]]:
         return [
             {
                 "name": "Total Extracted Amount",
@@ -161,11 +161,11 @@ class WeekOverviewExtractedAmount(AbstractTemplate):
 
 class WeekOverviewProfitAmount(AbstractTemplate):
     @staticmethod
-    def __title_template__() -> str:
+    def _title_template() -> str:
         return "Last Week MEV Stat"
 
     @staticmethod
-    def __stats_templates__() -> List[dict[str, str]]:
+    def _stats_templates() -> List[dict[str, str]]:
         return [
             {
                 "name": "Total MEV Bots profit",
@@ -176,11 +176,11 @@ class WeekOverviewProfitAmount(AbstractTemplate):
 
 class WeekOverviewVictims(AbstractTemplate):
     @staticmethod
-    def __title_template__() -> str:
+    def _title_template() -> str:
         return "Last Week MEV Stat"
 
     @staticmethod
-    def __stats_templates__() -> List[dict[str, str]]:
+    def _stats_templates() -> List[dict[str, str]]:
         return [
             {
                 "name": "Total number of MEV victim addresses",

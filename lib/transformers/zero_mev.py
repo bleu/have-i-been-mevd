@@ -15,7 +15,7 @@ class ScanAddressData:
     most_mev_protocol_usd_amount: float
 
 
-def preporcess(mev_transactions: pd.DataFrame) -> pd.DataFrame:
+def preprocess(mev_transactions: pd.DataFrame) -> pd.DataFrame:
     mev_transactions["user_loss_usd"] = abs(mev_transactions["user_loss_usd"])
     mev_transactions.dropna(subset=["user_loss_usd"], inplace=True)
     return mev_transactions

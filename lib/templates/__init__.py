@@ -91,7 +91,7 @@ class AbstractTemplate(ABC):
     def create_discord_embed_with_image(cls, data, x_image, y_image):
         image = cls.generate_image(x_image, y_image)
         embed = cls.create_discord_embed(data)
-        filename = "graph.png"
+        filename = "plot.png"
         discord_file = discord.File(image, filename=filename)
         embed.set_image(url=f"attachment://{filename}")
         return dict(embed=embed, file=discord_file)

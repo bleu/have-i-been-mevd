@@ -1,24 +1,31 @@
 import asyncio
-from dataclasses import asdict
 import functools
 import os
 import logging
 import schedule
-
+from datetime import datetime
 
 from bots.discord.commands import bot as bot_client
-from lib.schedule import schedule_module
-from lib.templates import WeekOverviewTemplate
-from lib.transformers.zero_mev import (
-    filter_mev_transactions_with_user_loss,
-    get_overview_data_from_mev_transactions,
+from bots.discord.reports import (
+    extracted_amount_report,
+    profit_amount_report,
+    swaps_report,
+    victims_report,
 )
-from lib.zero_mev_api.api import get_all_mev_transactions_on_last_week
+from lib.schedule import schedule_module
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
+WEEKLY_REPORT_REFERENCE = datetime(2024, 1, 1)
+REPORTS_LIST = [
+    swaps_report,
+    extracted_amount_report,
+    profit_amount_report,
+    victims_report,
+]
 
-def send_to_channel(func, channel_id: int = int(os.getenv(f"DISCORD_CHANNEL_ID"))):
+
+def send_to_channel(func, channel_id: int = int(os.getenv(f"DISCORD_CHANNEL_ID"))): # type: ignore
     """Print the runtime of the decorated function"""
 
     @functools.wraps(func)
@@ -39,18 +46,19 @@ async def on_ready():
     logging.info(f"Synced {len(synced)} commands")
 
 
-@send_to_channel()
-async def week_overview_report():
-    logging.info("Overview week report starting")
-    txs = await get_all_mev_transactions_on_last_week()
-    filtered_txs = filter_mev_transactions_with_user_loss(txs)
-    overview_data = get_overview_data_from_mev_transactions(filtered_txs)
-    embed = WeekOverviewTemplate.create_discord_embed(asdict(overview_data))
-    return dict(embed=embed)
+@send_to_channel
+async def weekly_report():
+    logging.info("Weekly report starting")
+    now = datetime.now()
+    delta = now - WEEKLY_REPORT_REFERENCE
+    weeks_since_start = delta.days // 7
+
+    task_index = weeks_since_start % len(REPORTS_LIST)
+    return await REPORTS_LIST[task_index]()
 
 
 async def start_discord_bot():
-    await bot_client.start(os.getenv(f"DISCORD_BOT_TOKEN"))
+    await bot_client.start(os.getenv(f"DISCORD_BOT_TOKEN"))  # type: ignore
 
 
 async def run_schedule():
@@ -64,7 +72,6 @@ async def main():
     await asyncio.gather(run_schedule(), start_discord_bot())
 
 
-# Run the main function
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())

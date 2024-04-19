@@ -1,8 +1,8 @@
 import asyncio
 
-from bots.discord.__main__ import week_overview_report
+from bots.discord.__main__ import weekly_report
 
 
 SCHEDULE = [
-    ["monday", "13:00", week_overview_report, asyncio.create_task],
+    ["monday", "13:00", weekly_report, asyncio.create_task],
 ]

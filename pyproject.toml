@@ -16,10 +16,25 @@ ipython = "^8.23.0"
 ratelimit = "^2.2.1"
 schedule = "^1.2.1"
 python-telegram-bot = "^21.1.1"
+pandas = "^2.2.2"
+seaborn = "^0.13.2"
+matplotlib = "^3.8.4"
 
 
 [tool.poetry.group.dev.dependencies]
 datamodel-code-generator = "^0.25.5"
+pyright = "^1.1.359"
+
+[tool.pyright]
+# NOTE: these paths are excluded but not IGNORED. They are still included in the analysis if they are referenced by source files that are not excluded. 
+exclude = [
+    "**/__pycache__",
+    "lib/zero_mev_api/models.py",
+    ".venv/",
+]
+reportIncompatibleVariableOverride = 'warning'
+strictParameterNoneValue = false
+
 
 [build-system]
 requires = ["poetry-core"]

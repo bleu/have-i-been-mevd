@@ -5,7 +5,7 @@ from discord import app_commands
 from discord.ext.commands import Bot
 from lib.templates import AddressScanTemplate
 from lib.transformers.zero_mev import (
-    minimal_preporcessing,
+    preporcess,
     get_scan_address_data_from_mev_transactions,
 )
 from lib.w3 import get_web3_provider
@@ -53,7 +53,7 @@ async def scan_address(
         return
 
     mev_txs = await get_all_mev_transactions_related_to_address(address)
-    mev_txs_with_user_loss = minimal_preporcessing(mev_txs)
+    mev_txs_with_user_loss = preporcess(mev_txs)
     if mev_txs_with_user_loss.empty:
         await interaction.followup.send(
             "No MEV transactions found for the provided address.",

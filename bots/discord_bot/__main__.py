@@ -5,8 +5,8 @@ import logging
 import schedule
 from datetime import datetime
 
-from bots.discord.commands import bot as bot_client
-from bots.discord.reports import (
+from discord_bot.commands import bot as bot_client
+from discord_bot.reports import (
     extracted_amount_report,
     profit_amount_report,
     swaps_report,
@@ -68,7 +68,7 @@ async def run_schedule():
 
 
 async def main():
-    schedule_module("discord")
+    schedule_module("discord_bot")
     await asyncio.gather(run_schedule(), start_discord_bot())
 
 

@@ -45,7 +45,7 @@ def get_module_scheduler_data(module_name: str) -> List[Tuple[str, str, Callable
 
     """
     try:
-        scheduler_module = importlib.import_module(f"bots.{module_name}.schedules")
+        scheduler_module = importlib.import_module(f"{module_name}.schedules")
         schedule = getattr(scheduler_module, f"SCHEDULE")
         logging.debug(f"Loaded schedules for {module_name}")
         return schedule

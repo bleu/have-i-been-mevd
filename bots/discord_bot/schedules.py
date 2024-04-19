@@ -1,6 +1,6 @@
 import asyncio
 
-from bots.discord.__main__ import weekly_report
+from discord_bot.__main__ import weekly_report
 
 
 SCHEDULE = [

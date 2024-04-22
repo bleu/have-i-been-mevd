@@ -1,6 +1,8 @@
 import { RootLayout } from "#/components/RootLayout";
 import { Metadata } from "next";
 import "./globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
+import * as React from "react";
 
 export const metadata: Metadata = {
   title: `MEV Scanner`,

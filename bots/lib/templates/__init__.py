@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 import discord
 import pystache
 from abc import ABC, abstractmethod
@@ -50,7 +50,35 @@ class AbstractTemplate(ABC):
         ]
 
     @classmethod
-    def create_discord_embed(cls, data, inline=False):
+    def create_twitter_post(
+        cls,
+        data,
+        has_image=False,
+        x_image: List[str] = None,
+        y_image: List[int | float] = None,
+    ):
+        message = dict()
+        formatted_data = format_variables(data)
+        title = pystache.render(cls._title_template(), formatted_data)
+        stats = "\n".join(
+            [
+                f"{pystache.render(stat['name'], formatted_data)}: {pystache.render(stat['value'], formatted_data)}"
+                for stat in cls._stats_templates()
+            ]
+        )
+        footer = "\n".join(cls._footers_templates())
+        message["text"] = f"{title}\n\n{stats}\n\n{footer}"
+        if has_image:
+            if not x_image or not y_image:
+                raise ValueError("x_image and y_image must be provided")
+            message["image"] = cls.generate_image(x_image, y_image)
+        return message
+
+    @classmethod
+    def create_discord_embed(
+        cls, data, inline=False, has_image=False, x_image=None, y_image=None
+    ):
+        output = {}
         formatted_data = format_variables(data)
         text_footer = "\n".join(cls._footers_templates())
         embed = discord.Embed(
@@ -64,7 +92,18 @@ class AbstractTemplate(ABC):
             name = pystache.render(name_template, formatted_data)
             value = pystache.render(value_template, formatted_data)
             embed.add_field(name=name, value=value, inline=inline)
-        return embed
+
+        output["embed"] = embed
+        if has_image:
+            if not x_image or not y_image:
+                raise ValueError("x_image and y_image must be provided")
+            image = cls.generate_image(x_image, y_image)
+            filename = "plot.png"
+            discord_file = discord.File(image, filename=filename)
+            embed.set_image(url=f"attachment://{filename}")
+            output["file"] = discord_file
+
+        return output
 
     @classmethod
     def create_telegram_message(cls, data):
@@ -86,15 +125,6 @@ class AbstractTemplate(ABC):
         raise NotImplementedError(
             "This method should be implemented in the child class."
         )
-
-    @classmethod
-    def create_discord_embed_with_image(cls, data, x_image, y_image):
-        image = cls.generate_image(x_image, y_image)
-        embed = cls.create_discord_embed(data)
-        filename = "plot.png"
-        discord_file = discord.File(image, filename=filename)
-        embed.set_image(url=f"attachment://{filename}")
-        return dict(embed=embed, file=discord_file)
 
 
 class AddressScanTemplate(AbstractTemplate):

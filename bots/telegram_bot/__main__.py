@@ -5,12 +5,12 @@ from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext
 
 from lib.templates import AddressScanTemplate
-from lib.transformers.zero_mev import (
+from lib.zero_mev.transformers import (
     preprocess,
     get_scan_address_data_from_mev_transactions,
 )
 from lib.w3 import get_web3_provider
-from lib.zero_mev_api.api import get_all_mev_transactions_related_to_address
+from lib.zero_mev.api import get_all_mev_transactions_related_to_address
 
 from telegram.ext import (
     Application,

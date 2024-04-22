@@ -3,7 +3,6 @@ import functools
 import os
 import logging
 import schedule
-from datetime import datetime
 
 from discord_bot.commands import bot as bot_client
 from discord_bot.reports import (
@@ -13,10 +12,10 @@ from discord_bot.reports import (
     victims_report,
 )
 from lib.schedule import schedule_module
+from lib.task_rotation import get_current_task
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
-WEEKLY_REPORT_REFERENCE = datetime(2024, 1, 1)
 REPORTS_LIST = [
     swaps_report,
     extracted_amount_report,
@@ -25,7 +24,7 @@ REPORTS_LIST = [
 ]
 
 
-def send_to_channel(func, channel_id: int = int(os.getenv(f"DISCORD_CHANNEL_ID"))): # type: ignore
+def send_to_channel(func, channel_id: int = int(os.getenv(f"DISCORD_CHANNEL_ID"))):  # type: ignore
     """Print the runtime of the decorated function"""
 
     @functools.wraps(func)
@@ -49,12 +48,8 @@ async def on_ready():
 @send_to_channel
 async def weekly_report():
     logging.info("Weekly report starting")
-    now = datetime.now()
-    delta = now - WEEKLY_REPORT_REFERENCE
-    weeks_since_start = delta.days // 7
-
-    task_index = weeks_since_start % len(REPORTS_LIST)
-    return await REPORTS_LIST[task_index]()
+    report = get_current_task(REPORTS_LIST)
+    return await report()
 
 
 async def start_discord_bot():

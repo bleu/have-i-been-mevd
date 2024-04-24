@@ -19,6 +19,8 @@ python-telegram-bot = "^21.1.1"
 pandas = "^2.2.2"
 seaborn = "^0.13.2"
 matplotlib = "^3.8.4"
+tweepy = "^4.14.0"
+retry-async = "^0.1.4"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -29,7 +31,6 @@ pyright = "^1.1.359"
 # NOTE: these paths are excluded but not IGNORED. They are still included in the analysis if they are referenced by source files that are not excluded. 
 exclude = [
     "**/__pycache__",
-    "lib/zero_mev_api/models.py",
     ".venv/",
 ]
 reportIncompatibleVariableOverride = 'warning'

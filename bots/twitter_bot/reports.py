@@ -22,7 +22,7 @@ async def swaps_report():
         )
     )
 
-    return WeekOverviewNumberOfSwaps.create_discord_embed(
+    return WeekOverviewNumberOfSwaps.create_twitter_post(
         {
             "mev_swaps_number": mev_swaps_number,
         },
@@ -37,7 +37,7 @@ async def extracted_amount_report():
     txs = await get_all_mev_transactions_on_last_week()
     txs_processed = preprocess(txs)
     extracted_amount = txs_processed["user_loss_usd"].sum()
-    return WeekOverviewExtractedAmount.create_discord_embed(
+    return WeekOverviewExtractedAmount.create_twitter_post(
         {"mev_extracted_amount": extracted_amount}
     )
 
@@ -47,7 +47,7 @@ async def profit_amount_report():
     txs = await get_all_mev_transactions_on_last_week()
     txs_processed = preprocess(txs)
     profit_amount = txs_processed["extractor_profit_usd"].sum()
-    return WeekOverviewProfitAmount.create_discord_embed(
+    return WeekOverviewProfitAmount.create_twitter_post(
         {"mev_profit_amount": profit_amount}
     )
 
@@ -57,6 +57,6 @@ async def victims_report():
     txs = await get_all_mev_transactions_on_last_week()
     txs_processed = preprocess(txs)
     victims_number = txs_processed["address_from"].unique().size
-    return WeekOverviewVictims.create_discord_embed(
+    return WeekOverviewVictims.create_twitter_post(
         {"mev_victims_number": victims_number}
     )

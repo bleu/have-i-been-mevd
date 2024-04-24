@@ -4,12 +4,12 @@ import discord
 from discord import app_commands
 from discord.ext.commands import Bot
 from lib.templates import AddressScanTemplate
-from lib.transformers.zero_mev import (
+from lib.zero_mev.transformers import (
     preprocess,
     get_scan_address_data_from_mev_transactions,
 )
 from lib.w3 import get_web3_provider
-from lib.zero_mev_api.api import get_all_mev_transactions_related_to_address
+from lib.zero_mev.api import get_all_mev_transactions_related_to_address
 
 
 intents = discord.Intents.all()
@@ -63,8 +63,8 @@ async def scan_address(
     scan_data = get_scan_address_data_from_mev_transactions(
         mev_txs_with_user_loss, address
     )
-    embed = AddressScanTemplate.create_discord_embed(asdict(scan_data))
+    output = AddressScanTemplate.create_discord_embed(asdict(scan_data))
     await interaction.followup.send(
-        embed=embed,
+        embed=output["embed"],
         ephemeral=ephemeral,
     )

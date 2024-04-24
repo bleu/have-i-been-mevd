@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import pandas as pd
 
+
 @dataclass
 class ScanAddressData:
     address: str

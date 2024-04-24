@@ -20,6 +20,7 @@ pandas = "^2.2.2"
 seaborn = "^0.13.2"
 matplotlib = "^3.8.4"
 tweepy = "^4.14.0"
+retry-async = "^0.1.4"
 
 
 [tool.poetry.group.dev.dependencies]

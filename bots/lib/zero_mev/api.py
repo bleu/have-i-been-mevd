@@ -2,8 +2,8 @@ import asyncio
 import logging
 import httpx
 import pandas as pd
+from retry_async import retry
 from lib.latest_eth_block import get_latest_eth_block
-from ratelimit import limits, sleep_and_retry
 
 
 API_BASE_URL = "https://data.zeromev.org/v1"
@@ -57,8 +57,17 @@ async def get_all_mev_transactions_on_last_week() -> pd.DataFrame:
         return pd.DataFrame(data=responses)
 
 
-@sleep_and_retry
-@limits(calls=MAX_CALLS_PER_SECOND, period=1)
+@retry(
+    exceptions=(
+        httpx.HTTPStatusError,
+        httpx.ReadTimeout,
+        httpx.ConnectTimeout,
+        httpx.ReadError,
+    ),
+    is_async=True,
+    tries=3,
+    delay=1,
+)
 async def fetch_all_mev_from_block(
     client: httpx.AsyncClient, block_number: int, count: int = 100
 ):

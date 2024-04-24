@@ -2825,6 +2825,20 @@ requests = ">=2.0.0"
 rsa = ["oauthlib[signedtoken] (>=3.0.0)"]
 
 [[package]]
+name = "retry-async"
+version = "0.1.4"
+description = ""
+optional = false
+python-versions = ">=3.10,<4.0"
+files = [
+    {file = "retry_async-0.1.4-py3-none-any.whl", hash = "sha256:21b383c7bc52013478337b894f476c9f106485cfeeb5d449abe5f745be2da219"},
+    {file = "retry_async-0.1.4.tar.gz", hash = "sha256:8414d69b20920a1d700de34b68c0f972fa36a0158450a6f6abc5b45a241ac6b6"},
+]
+
+[package.dependencies]
+decorator = ">=5.1.1,<6.0.0"
+
+[[package]]
 name = "rlp"
 version = "4.0.0"
 description = "rlp: A package for Recursive Length Prefix encoding and decoding"
@@ -3383,4 +3397,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f78290611bb9607bf96eb830bde0b2170119fdb888d4da120d4871caa1a447c9"
+content-hash = "8e681657e29fc4dbe19bb1cc2fc0e1ae8a7bdcdb4baa62edd8e6b6dfa7be8fc1"

@@ -1,5 +1,5 @@
 import logging
-import time
+import asyncio
 
 import schedule
 
@@ -8,14 +8,17 @@ from lib.schedule import schedule_module
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
-def run():
-    schedule_module("twitter")
-    logging.info("Twitter bot started")
-
+async def run_schedule():
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        await asyncio.sleep(1)
+
+
+async def main():
+    schedule_module("twitter_bot")
+    await run_schedule()
 
 
 if __name__ == "__main__":
-    run()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())

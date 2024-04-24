@@ -22,7 +22,7 @@ async def swaps_report():
         )
     )
 
-    return WeekOverviewNumberOfSwaps.create_twitter_post(
+    return WeekOverviewNumberOfSwaps.create_discord_embed(
         {
             "mev_swaps_number": mev_swaps_number,
         },

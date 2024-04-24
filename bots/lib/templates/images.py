@@ -5,7 +5,7 @@ from typing import List, Union
 from lib.templates.utils import format_currency, fig_to_bytesio
 
 
-def generate_image(
+def bar_plot(
     x: List[str], y: List[Union[int, float]], xlabel: str, ylabel: str, title: str
 ):
     sns.set_theme(style="darkgrid")

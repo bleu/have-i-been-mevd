@@ -2,7 +2,7 @@ from typing import Dict, List
 import discord
 import pystache
 from abc import ABC, abstractmethod
-from lib.templates.images import generate_image
+from lib.templates.images import bar_plot
 from lib.templates.utils import (
     capitalize_first_letter,
     format_currency,
@@ -165,7 +165,7 @@ class WeekOverviewNumberOfSwaps(AbstractTemplate):
         title = "Last Week MEV Swaps per type"
         xlabel = "MEV Type"
         ylabel = "Number of Swaps"
-        return generate_image(
+        return bar_plot(
             x=x,
             y=y,
             title=title,

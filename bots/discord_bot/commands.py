@@ -63,8 +63,8 @@ async def scan_address(
     scan_data = get_scan_address_data_from_mev_transactions(
         mev_txs_with_user_loss, address
     )
-    embed = AddressScanTemplate.create_discord_embed(asdict(scan_data))
+    output = AddressScanTemplate.create_discord_embed(asdict(scan_data))
     await interaction.followup.send(
-        embed=embed,
+        embed=output["embed"],
         ephemeral=ephemeral,
     )

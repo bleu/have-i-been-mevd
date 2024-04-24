@@ -17,6 +17,8 @@ from telegram.ext import (
     CommandHandler,
 )
 
+logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.INFO)
+
 
 async def scan_address(update: Update, context: CallbackContext):
     invalid_address_response = (

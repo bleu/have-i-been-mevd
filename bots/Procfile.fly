@@ -1,0 +1,3 @@
+discord:python -m discord_bot
+twitter:python -m twitter_bot
+telegram:python -m telegram_bot

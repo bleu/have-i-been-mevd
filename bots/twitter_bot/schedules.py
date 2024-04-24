@@ -28,5 +28,5 @@ async def weekly_report():
 
 
 SCHEDULE = [
-    ["wednesday", "13:00", weekly_report, asyncio.create_task],
+    ["monday", "13:00", weekly_report, asyncio.create_task],
 ]

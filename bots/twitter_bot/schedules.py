@@ -3,6 +3,7 @@ import logging
 
 from twitter_bot.api import post_tweet, get_client_v1, get_client_v2
 from twitter_bot.reports import (
+    dex_report,
     extracted_amount_report,
     profit_amount_report,
     swaps_report,
@@ -15,6 +16,7 @@ REPORTS_LIST = [
     extracted_amount_report,
     profit_amount_report,
     victims_report,
+    dex_report,
 ]
 
 

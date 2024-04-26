@@ -36,7 +36,8 @@ export async function scanAddressMEV(
     getPaginatedMevTransactionsByAddressAndKey(address, "address_from"),
     getPaginatedMevTransactionsByAddressAndKey(address, "address_to"),
   ]).then(([from, to]) => [...from, ...to]);
-  const totalAmountUsd = mevTxs.reduce(
+  const sandwichTxs = mevTxs.filter((tx) => tx.mev_type == "sandwich");
+  const totalAmountUsd = sandwichTxs.reduce(
     (acc, tx) => acc + Math.abs(tx.user_loss_usd || 0),
     0
   );
@@ -56,7 +57,7 @@ export async function scanAddressMEV(
       }, new Map<string, number>());
   };
 
-  const mev_by_protocol = sumUserLossesByProtocol(mevTxs);
+  const mev_by_protocol = sumUserLossesByProtocol(sandwichTxs);
 
   const [most_mev_protocol_name, most_mev_protocol_usd_amount] = Array.from(
     mev_by_protocol.entries()
@@ -70,7 +71,7 @@ export async function scanAddressMEV(
   return {
     address,
     totalAmountUsd,
-    mevTxsLength: mevTxs.length,
+    mevTxsLength: sandwichTxs.length,
     mostMevProtocolName: most_mev_protocol_name,
     mostMevProtocolUsdAmount: most_mev_protocol_usd_amount,
   };

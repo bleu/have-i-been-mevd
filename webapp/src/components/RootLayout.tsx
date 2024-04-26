@@ -7,7 +7,6 @@ import React from "react";
 import Fonts from "./Fonts";
 import merge from "lodash.merge";
 
-import { Footer } from "./Footer";
 import { WagmiProvider } from "wagmi";
 import { config } from "#/wagmi/client";
 import { RainbowKitProvider, Theme, darkTheme } from "@rainbow-me/rainbowkit";
@@ -27,10 +26,7 @@ export function RootLayout({ children }: React.PropsWithChildren) {
             theme={CustomTheme}
           >
             <Fonts />
-            <div className="flex flex-col h-screen">
-              <div className="size-full">{children}</div>
-              <Footer />
-            </div>
+            <div className="flex flex-col h-screen">{children}</div>
             <Toaster />
           </RainbowKitProvider>
         </QueryClientProvider>

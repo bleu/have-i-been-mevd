@@ -19,7 +19,7 @@ div[data-rk] {
 
 @layer base {
   :root {
-    --input: 0 0% 100%;
+    --input: 40 100% 80%;
     --ring: 40 100% 80%;
     --foreground: 26 100% 6%;
     --background: 40 100% 93%;

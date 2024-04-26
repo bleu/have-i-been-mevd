@@ -11,7 +11,7 @@ export function Footer() {
         >
           bleu
         </a>
-        &nbsp;using data from&nbsp;
+        &nbsp;using&nbsp;
         <a
           target="_blank"
           rel="noopener noreferrer"

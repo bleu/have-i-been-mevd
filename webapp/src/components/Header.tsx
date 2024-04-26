@@ -4,7 +4,7 @@ import { Address } from "viem";
 
 export function Header({ address }: { address?: Address }) {
   return (
-    <div className="flex flex-row w-full justify-between items-center border-b-2 border-primary py-2">
+    <div className="flex flex-row w-full justify-between items-center border-b-2 py-4">
       <span className="text-xl font-bold">HAVE I BEEN MEV'D?</span>
       {address ? (
         <Button shade="dark">{truncateAddress(address)}</Button>

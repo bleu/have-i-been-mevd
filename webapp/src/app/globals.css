@@ -24,6 +24,7 @@ div[data-rk] {
     --foreground: 26 100% 6%;
     --background: 40 100% 93%;
     --primary: 40 100% 80%;
+    --border: 40 100% 80%;
     --primary-foreground: 26 100% 6%;
     --destructive: 0 100% 63%;
     --destructive-foreground: 0 100% 63%;

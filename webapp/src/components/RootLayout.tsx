@@ -37,16 +37,16 @@ export function RootLayout({ children }: React.PropsWithChildren) {
 
 const CustomTheme = merge(darkTheme(), {
   colors: {
-    accentColor: COLORS.accent,
+    accentColor: COLORS.foreground,
     accentColorForeground: COLORS["accent-foreground"],
     closeButtonBackground: COLORS.background,
-    closeButton: COLORS.destructive,
+    closeButton: COLORS.foreground,
     connectButtonTextError: COLORS.destructive,
     generalBorder: COLORS.border,
     modalBackground: COLORS.background,
     modalBorder: COLORS.border,
     modalText: COLORS.foreground,
-    modalTextSecondary: COLORS.primary,
+    modalTextSecondary: COLORS.foreground,
     selectedOptionBorder: COLORS.border,
   },
   fonts: {

@@ -23,7 +23,7 @@ export function Loading() {
   }, []);
 
   return (
-    <div className="flex w-full h-full justify-center items-center">
+    <div className="flex flex-row w-full h-full justify-center items-center gap-8">
       <Image
         src={images[currentImageIndex]}
         alt="Loading..."
@@ -31,6 +31,7 @@ export function Loading() {
         width={100}
         objectFit="contain"
       />
+      <span className="text-2xl">We’re preparing your order...</span>
     </div>
   );
 }

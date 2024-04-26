@@ -5,6 +5,8 @@ import { Footer } from "./Footer";
 import { APP_URL, TwitterShareButton } from "./TwitterShareButton";
 import { TradeOnCoWButton } from "./TradeOnCoWButton";
 import { BackToHomeButton } from "./BackToHomeButton";
+import { IAddressMevData } from "#/utils/zeroMevApi";
+import { capitalize, formatNumber } from "@bleu-fi/ui";
 
 export function FreeMevReceipt({ address }: { address?: Address }) {
   const twitterShareText = `I found out that the address ${address} is MEV-free. Check if your address lost money to MEV bots at ${APP_URL}`;
@@ -44,6 +46,55 @@ export function FreeMevReceipt({ address }: { address?: Address }) {
         </div>
       </div>
       <Footer />
+    </div>
+  );
+}
+
+export function MevReceipt({
+  mevData,
+  params,
+}: {
+  mevData: IAddressMevData;
+  params: { address: Address };
+}) {
+  const totalAmountUsdFormatted = `$${((mevData?.sum_user_loss_usd || 0) * -1).toFixed()}`;
+  const totalVolumeUsdFormatted = `$${formatNumber(mevData?.sum_user_swap_volume_usd || 0)}`;
+
+  const twitterShareText = `I found out that this wallet is toasted, it lost ${totalAmountUsdFormatted} on ${mevData?.sum_user_swap_count || 0} MEV transactions. Install MEV Blocker: https://mevblocker.io\n\nScan your wallet using ${APP_URL}`;
+
+  return (
+    <div className="bg-primary py-16 w-full h-full">
+      <div className="flex flex-col h-full w-full items-center justify-between bg-gradient-diagonal-to-tr from-destructive-light to-destructive to-50% text-background">
+        <div className="top-sandwich-background h-2/5 " />
+        <div className="flex flex-col items-left h-full justify-between w-1/2 gap-8">
+          <Header address={params.address} />
+          <div className="flex flex-col gap-2 text-primary">
+            <span className="text-3xl">This wallet is toast!</span>
+            <span className="text-background font-extrabold text-6xl">
+              {totalAmountUsdFormatted} eaten away
+            </span>
+            <span className="text-3xl font-semibold">
+              in{" "}
+              <span className="font-bold">
+                {mevData?.sum_user_swap_count} transactions{" "}
+              </span>
+              for a{" "}
+              <span className="font-bold">
+                volume of {totalVolumeUsdFormatted}
+              </span>
+            </span>
+            <div className="flex flex-col justify-center gap-4 text-background">
+              <div className="flex flex-row gap-2">
+                <BackToHomeButton />
+                <TwitterShareButton text={twitterShareText} />
+                <TradeOnCoWButton />
+              </div>
+            </div>
+          </div>
+          <Footer />
+        </div>
+        <div className="bottom-sandwich-background h-2/5" />
+      </div>
     </div>
   );
 }

@@ -17,8 +17,8 @@ export function TwitterShareButton({ text }: TwitterShareButtonProps) {
   return (
     <Button
       onClick={handleShare}
-      variant="outline"
-      className="border rounded-full"
+      variant="ghost"
+      className="border rounded-full hover:text-foreground"
     >
       Share
     </Button>

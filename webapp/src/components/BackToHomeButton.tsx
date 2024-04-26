@@ -15,8 +15,8 @@ export function BackToHomeButton() {
   return (
     <Button
       onClick={onClick}
-      variant="outline"
-      className="rounded-full py-0 px-2"
+      variant="ghost"
+      className="rounded-full border py-0 px-2 hover:text-foreground"
     >
       <ArrowLeftIcon className="size-5" />
     </Button>

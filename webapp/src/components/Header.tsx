@@ -1,15 +1,16 @@
 import { truncateAddress } from "#/utils/truncateAddress";
-import { Button } from "@bleu-fi/ui";
 import { Address } from "viem";
 
 export function Header({ address }: { address?: Address }) {
   return (
-    <div className="flex flex-row w-full justify-between items-center border-b-2 py-4">
+    <div className="flex flex-row w-full justify-between items-center border border-x-0 border-t-0 py-4">
       <span className="text-xl font-bold">HAVE I BEEN MEV'D?</span>
       {address ? (
-        <Button shade="dark">{truncateAddress(address)}</Button>
+        <span className="bg-white text-md rounded-full text-black py-2 px-4 border">
+          {truncateAddress(address)}
+        </span>
       ) : (
-        <span className="text-md text-info">Not connected</span>
+        <span className="text-md text-info py-2 px-4">Not connected</span>
       )}
     </div>
   );

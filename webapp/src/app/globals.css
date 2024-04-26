@@ -28,6 +28,7 @@ div[data-rk] {
     --primary-foreground: 26 100% 6%;
     --destructive: 0 100% 63%;
     --destructive-foreground: 0 100% 63%;
+    --destructive-light: 334 100% 84%;
     --accent: 40 100% 80%;
     --accent-foreground: 19, 100%, 6%;
     --highlight: 154 100% 15%;
@@ -44,5 +45,17 @@ div[data-rk] {
     /* font-feature-settings: "rlig" 1, "calt" 1); */
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
+  }
+  .top-sandwich-background {
+  background-image: url('/assets/top_sandwich.svg');
+  background-repeat: repeat-x; 
+  background-size: auto 100%; 
+  width: 100%;
+  }
+  .bottom-sandwich-background {
+  background-image: url('/assets/bottom_sandwich.svg');
+  background-repeat: repeat-x; 
+  background-size: auto 100%; 
+  width: 100%;
   }
 }

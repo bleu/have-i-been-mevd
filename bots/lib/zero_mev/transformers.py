@@ -17,6 +17,9 @@ def preprocess(
     protocols_filter: list[str] = [],
     type_filter: list[str] = [],
 ) -> pd.DataFrame:
+    if mev_transactions.empty:
+        return mev_transactions
+
     mev_transactions["user_loss_usd"] = abs(
         mev_transactions["user_loss_usd"]
     )  # TODO: Check if this is correct

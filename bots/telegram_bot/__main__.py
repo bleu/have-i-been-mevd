@@ -32,7 +32,9 @@ async def scan_address(update: Update, context: CallbackContext):
             return
 
         mev_txs = await get_all_mev_transactions_related_to_address(address)
-        mev_txs_with_user_loss = preprocess(mev_txs)
+        mev_txs_with_user_loss = preprocess(
+            mev_txs, type_filter=["sandwich"], dropna_columns=[]
+        )
         if mev_txs_with_user_loss.empty:
             await update.message.reply_text(  # type: ignore
                 "No MEV transactions found for the provided address."

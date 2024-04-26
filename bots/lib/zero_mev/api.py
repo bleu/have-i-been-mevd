@@ -12,17 +12,7 @@ MAX_CALLS_PER_SECOND = 5
 
 async def get_all_mev_transactions_related_to_address(address: str) -> pd.DataFrame:
     logging.info(f"Getting all mev transactions related to {address}")
-    address_from_transaction, address_to_transaction = await asyncio.gather(
-        get_paginated_mev_transactions_by_address_and_key(address, "address_from"),
-        get_paginated_mev_transactions_by_address_and_key(address, "address_to"),
-    )
-    return pd.concat([address_from_transaction, address_to_transaction])
-
-
-async def get_paginated_mev_transactions_by_address_and_key(
-    address: str, params_address_key: str
-) -> pd.DataFrame:
-    params = {params_address_key: address, "page": 1}
+    params = {"address_from": address, "page": 1}
     all_data = []
     while True:
         async with httpx.AsyncClient() as client:

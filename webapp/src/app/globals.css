@@ -28,8 +28,8 @@ div[data-rk] {
     --primary-foreground: 26 100% 6%;
     --destructive: 0 100% 63%;
     --destructive-foreground: 0 100% 63%;
-    --accent: 154 100% 15%;
-    --accent-foreground: 154 100% 15%;
+    --accent: 40 100% 80%;
+    --accent-foreground: 19, 100%, 6%;
     --highlight: 154 100% 15%;
     --info: 30 2% 67%;
     --success: 151 100% 21%;

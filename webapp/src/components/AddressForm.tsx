@@ -7,6 +7,7 @@ import { scanAddressSchema } from "#/utils/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { CustomConnectButton } from "./CustomConnectButton";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 export function AddressForm() {
   const router = useRouter();
@@ -36,17 +37,26 @@ export function AddressForm() {
           </p>
           <Image src={"/assets/crumbs.svg"} height={200} width={200} alt="" />
         </div>
-        <InputField
-          // @ts-ignore
-          form={form}
-          field={{
-            name: "address",
-            placeholder: "Enter an Ethereum address or an ENS",
-            mode: "text",
-            type: "input",
-            value: "",
-          }}
-        />
+        <div className="flex flex-row justify-between items-end gap-2">
+          <InputField
+            // @ts-ignore
+            form={form}
+            field={{
+              name: "address",
+              placeholder: "Enter an Ethereum or an ENS address",
+              mode: "text",
+              type: "input",
+              value: "",
+            }}
+          />
+          <Button
+            type="submit"
+            variant="ghost"
+            className="rounded-full border px-3 py-5"
+          >
+            <ArrowRightIcon className="size-5" />
+          </Button>
+        </div>
       </Form>
       <div className="flex flex-row gap-2 items-center">
         <span>or</span>

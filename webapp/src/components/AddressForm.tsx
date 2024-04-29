@@ -31,11 +31,11 @@ export function AddressForm() {
           handleSubmit(onSubmit)();
         }}
       >
-        <div className="flex flex-row gap-2 justify-between items-end">
-          <p className="text-2xl text">
-            Wanna know if you’ve left crumbs <br /> on the table?
+        <div className="flex flex-row gap-2 justify-between items-end w-full">
+          <p className="text-2xl text-wrap w-3/5">
+            Wanna know if you’ve left crumbs on the table?
           </p>
-          <Image src={"/assets/crumbs.svg"} height={200} width={200} alt="" />
+          <img src={"/assets/crumbs.svg"} className="max-w-none" alt="" />
         </div>
         <div className="flex flex-row justify-between items-start gap-2">
           <InputField

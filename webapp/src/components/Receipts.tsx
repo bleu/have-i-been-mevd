@@ -6,14 +6,20 @@ import { APP_URL, TwitterShareButton } from "./TwitterShareButton";
 import { TradeOnCoWButton } from "./TradeOnCoWButton";
 import { BackToHomeButton } from "./BackToHomeButton";
 import { IAddressMevData } from "#/utils/zeroMevApi";
-import { capitalize, formatNumber } from "@bleu-fi/ui";
+import { formatNumber } from "@bleu-fi/ui";
 
-export function FreeMevReceipt({ address }: { address?: Address }) {
-  const twitterShareText = `I found out that the address ${address} is MEV-free. Check if your address lost money to MEV bots at ${APP_URL}`;
+export function FreeMevReceipt({
+  addressBytes,
+  addressName,
+}: {
+  addressBytes: Address;
+  addressName: string;
+}) {
+  const twitterShareText = `I found out that the address ${addressName} is MEV-free. Check if your address lost money to MEV bots at ${APP_URL}`;
 
   return (
     <div className="flex flex-col items-left gap-8 justify-between w-1/2">
-      <Header address={address} />
+      <Header address={addressBytes} />
       <div className="flex flex-col justify-center gap-4">
         <Image
           src="/logo.svg"
@@ -52,22 +58,24 @@ export function FreeMevReceipt({ address }: { address?: Address }) {
 
 export function MevReceipt({
   mevData,
-  params,
+  addressBytes,
+  addressName,
 }: {
   mevData: IAddressMevData;
-  params: { address: Address };
+  addressBytes: Address;
+  addressName: string;
 }) {
   const totalAmountUsdFormatted = `$${((mevData?.sum_user_loss_usd || 0) * -1).toFixed()}`;
   const totalVolumeUsdFormatted = `$${formatNumber(mevData?.sum_user_swap_volume_usd || 0)}`;
 
-  const twitterShareText = `I found out that this wallet is toasted, it lost ${totalAmountUsdFormatted} on ${mevData?.sum_user_swap_count || 0} MEV transactions. Install MEV Blocker: https://mevblocker.io\n\nScan your wallet using ${APP_URL}`;
+  const twitterShareText = `I found out that this wallet ${addressName} is toasted, it lost ${totalAmountUsdFormatted} on ${mevData?.sum_user_swap_count || 0} MEV transactions. Install MEV Blocker: https://mevblocker.io\n\nScan your wallet using ${APP_URL}`;
 
   return (
     <div className="bg-primary py-16 w-full h-full">
       <div className="flex flex-col h-full w-full items-center justify-between bg-gradient-diagonal-to-tr from-destructive-light to-destructive to-50% text-background">
         <div className="top-sandwich-background h-2/5 " />
         <div className="flex flex-col items-left h-full justify-between w-1/2 gap-8">
-          <Header address={params.address} />
+          <Header address={addressBytes} />
           <div className="flex flex-col gap-2 text-primary">
             <span className="text-3xl">This wallet is toast!</span>
             <span className="text-background font-extrabold text-6xl">

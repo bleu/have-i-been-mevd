@@ -37,7 +37,7 @@ export function AddressForm() {
           </p>
           <Image src={"/assets/crumbs.svg"} height={200} width={200} alt="" />
         </div>
-        <div className="flex flex-row justify-between items-end gap-2">
+        <div className="flex flex-row justify-between items-start gap-2">
           <InputField
             // @ts-ignore
             form={form}
@@ -49,13 +49,16 @@ export function AddressForm() {
               value: "",
             }}
           />
-          <Button
-            type="submit"
-            variant="ghost"
-            className="rounded-full border px-3 py-5"
-          >
-            <ArrowRightIcon className="size-5" />
-          </Button>
+          <div className="space-y-2">
+            <p className="text-muted-foreground text-sm" />
+            <Button
+              type="submit"
+              variant="ghost"
+              className="rounded-full border px-2 py-5"
+            >
+              <ArrowRightIcon className="size-5" />
+            </Button>
+          </div>
         </div>
       </Form>
       <div className="flex flex-row gap-2 items-center">

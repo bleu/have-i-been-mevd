@@ -1,8 +1,17 @@
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
 
 from typing import List, Union
 from lib.templates.utils import format_currency, fig_to_bytesio
+
+COLORS = [
+    "#c0392b",
+    "#e67e22",
+    "#f39c12",
+    "#d35400",
+    "#e74c3c",
+]
 
 
 def generate_base_plot(title: str):
@@ -21,8 +30,12 @@ def bar_plot(
     x = [str(i).capitalize() for i in x]
 
     fig, ax = generate_base_plot(title)
+    custom_cmap = LinearSegmentedColormap.from_list(
+        "custom_red_orange", [COLORS[1], COLORS[0]]
+    )
+
     norm = plt.Normalize(min(y), max(y))  # type: ignore
-    colors = plt.cm.Reds(norm(y))  # type: ignore
+    colors = [custom_cmap(norm(value)) for value in y]  # type: ignore
 
     sns.barplot(x=x, y=y, palette=colors, ax=ax)
 
@@ -55,19 +68,12 @@ def bar_plot(
 
 
 def pie_plot(x: List[str], y: List[Union[int, float]], title: str):
-    colors = [
-        "#c0392b",
-        "#e67e22",
-        "#f39c12",
-        "#d35400",
-        "#e74c3c",
-    ]
     fig, ax = generate_base_plot(title)
     labels = [str(i).capitalize() for i in x]
     ax.pie(
         y,
         labels=labels,
-        colors=colors,
+        colors=COLORS,
         autopct="%1.1f%%",
         startangle=140,
         pctdistance=1.15,

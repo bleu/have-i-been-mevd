@@ -44,6 +44,7 @@ module.exports = {
         destructive: {
           DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
           foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
+          light: "hsl(var(--destructive-light) / <alpha-value>)",
         },
         muted: {
           DEFAULT: "hsl(var(--muted) / <alpha-value>)",
@@ -135,6 +136,17 @@ module.exports = {
         swipeOut: "swipeOut 100ms ease-out",
         slideDown: "slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)",
         slideUp: "slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)",
+      },
+      backgroundImage: {
+        "gradient-diagonal-to-tr":
+          "linear-gradient(225deg, var(--tw-gradient-stops))",
+      },
+      gradientColorStops: {
+        destructive: {
+          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
+          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
+          light: "hsl(var(--destructive-light) / <alpha-value>)",
+        },
       },
     },
   },

@@ -4,14 +4,10 @@ export interface TwitterShareButtonProps extends Omit<ButtonProps, "onClick"> {
   text: string;
 }
 
-const APP_URL = "https://have-i-been-meved.vercel.app/";
+export const APP_URL = "https://have-i-been-meved.vercel.app/";
 
-export function TwitterShareButton({
-  text,
-  children,
-  ...props
-}: TwitterShareButtonProps) {
-  const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(APP_URL)}&text=${encodeURIComponent(text)}`;
+export function TwitterShareButton({ text }: TwitterShareButtonProps) {
+  const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 
   const handleShare = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -19,8 +15,12 @@ export function TwitterShareButton({
   };
 
   return (
-    <Button onClick={handleShare} {...props}>
-      {children}
+    <Button
+      onClick={handleShare}
+      variant="ghost"
+      className="border rounded-full hover:text-foreground"
+    >
+      Share
     </Button>
   );
 }

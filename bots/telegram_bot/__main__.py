@@ -25,16 +25,18 @@ async def scan_address(update: Update, context: CallbackContext):
         "Invalid address provided, please provide a valid Ethereum address."
     )
     try:
-        address = context.args[0]
+        address = context.args[0]  # type: ignore
         logging.info(f"Scanning {address} address")
         if not get_web3_provider().is_address(address):
-            await update.message.reply_text(invalid_address_response)
+            await update.message.reply_text(invalid_address_response)  # type: ignore
             return
 
         mev_txs = await get_all_mev_transactions_related_to_address(address)
-        mev_txs_with_user_loss = preprocess(mev_txs)
+        mev_txs_with_user_loss = preprocess(
+            mev_txs, type_filter=["sandwich"], dropna_columns=[]
+        )
         if mev_txs_with_user_loss.empty:
-            await update.message.reply_text(
+            await update.message.reply_text(  # type: ignore
                 "No MEV transactions found for the provided address."
             )
             return
@@ -43,14 +45,14 @@ async def scan_address(update: Update, context: CallbackContext):
             mev_txs_with_user_loss, address
         )
         response = AddressScanTemplate.create_telegram_message(asdict(scan_data))
-        await update.message.reply_text(response)
+        await update.message.reply_text(response)  # type: ignore
         return
 
     except (IndexError, ValueError):
-        await update.message.reply_text(invalid_address_response)
+        await update.message.reply_text(invalid_address_response)  # type: ignore
 
     except:
-        await update.message.reply_text(
+        await update.message.reply_text(  # type: ignore
             "An error occurred while processing the request."
         )
 
@@ -61,7 +63,7 @@ async def help_command(update: Update, context: CallbackContext):
         "/scan_address <address> - reply with how much MEV a wallet has suffered.\n"
         "/help - Shows this help message."
     )
-    await update.message.reply_text(help_text)
+    await update.message.reply_text(help_text)  # type: ignore
 
 
 def main():

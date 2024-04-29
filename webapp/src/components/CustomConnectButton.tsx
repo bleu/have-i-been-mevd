@@ -14,7 +14,6 @@ export function CustomConnectButton() {
         authenticationStatus,
         mounted,
       }) => {
-        console.log(account);
         const ready = mounted && authenticationStatus !== "loading";
         const connected = ready && account && chain;
         return (
@@ -28,14 +27,22 @@ export function CustomConnectButton() {
               if (!connected) {
                 return (
                   <>
-                    <Button onClick={openConnectModal} shade="dark">
-                      Connect Wallet
+                    <Button
+                      onClick={openConnectModal}
+                      shade="dark"
+                      className="rounded-full"
+                    >
+                      Connect your wallet
                     </Button>
                   </>
                 );
               }
               return (
-                <Button onClick={openAccountModal} shade="dark">
+                <Button
+                  onClick={openAccountModal}
+                  shade="dark"
+                  className="rounded-full"
+                >
                   {truncateAddress(account.address)}
                 </Button>
               );

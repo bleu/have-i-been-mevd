@@ -6,6 +6,7 @@ import schedule
 
 from discord_bot.commands import bot as bot_client
 from discord_bot.reports import (
+    dex_report,
     extracted_amount_report,
     profit_amount_report,
     swaps_report,
@@ -21,6 +22,7 @@ REPORTS_LIST = [
     extracted_amount_report,
     profit_amount_report,
     victims_report,
+    dex_report,
 ]
 
 
@@ -33,7 +35,7 @@ def send_to_channel(func, channel_id: int = int(os.getenv(f"DISCORD_CHANNEL_ID")
         message = await func(*args, **kwargs)
 
         if message:
-            return await channel.send(**message)
+            return await channel.send(**message)  # type: ignore
 
     return wrapper
 

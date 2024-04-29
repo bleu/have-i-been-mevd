@@ -1,8 +1,9 @@
 from typing import Dict, List
 import discord
+from matplotlib.pyplot import xlabel
 import pystache
 from abc import ABC, abstractmethod
-from lib.templates.images import generate_image
+from lib.templates.images import bar_plot, pie_plot
 from lib.templates.utils import (
     capitalize_first_letter,
     format_currency,
@@ -18,6 +19,7 @@ data_formatter_configs = [
     {"key": "mev_extracted_amount", "formatter": format_currency},
     {"key": "mev_profit_amount", "formatter": format_currency},
     {"key": "mev_victims_number", "formatter": str},
+    {"key": "mev_dex_amount", "formatter": format_currency},
 ]
 
 
@@ -49,6 +51,12 @@ class AbstractTemplate(ABC):
             "Install MEV blocker: https://mevblocker.io/",
         ]
 
+    @staticmethod
+    def _generate_image(x: List[str], y: List[int | float]):
+        raise NotImplementedError(
+            "This method should be implemented in the child class."
+        )
+
     @classmethod
     def create_twitter_post(
         cls,
@@ -71,7 +79,7 @@ class AbstractTemplate(ABC):
         if has_image:
             if not x_image or not y_image:
                 raise ValueError("x_image and y_image must be provided")
-            message["image"] = cls.generate_image(x_image, y_image)
+            message["image"] = cls._generate_image(x_image, y_image)
         return message
 
     @classmethod
@@ -97,7 +105,7 @@ class AbstractTemplate(ABC):
         if has_image:
             if not x_image or not y_image:
                 raise ValueError("x_image and y_image must be provided")
-            image = cls.generate_image(x_image, y_image)
+            image = cls._generate_image(x_image, y_image)
             filename = "plot.png"
             discord_file = discord.File(image, filename=filename)
             embed.set_image(url=f"attachment://{filename}")
@@ -119,12 +127,6 @@ class AbstractTemplate(ABC):
             message += f"{name}: {value}\n"
         message += f"\n\n{text_footer}"
         return message
-
-    @staticmethod
-    def generate_image(x: List[str], y: List[int | float]):
-        raise NotImplementedError(
-            "This method should be implemented in the child class."
-        )
 
 
 class AddressScanTemplate(AbstractTemplate):
@@ -149,7 +151,7 @@ class AddressScanTemplate(AbstractTemplate):
 class WeekOverviewNumberOfSwaps(AbstractTemplate):
     @staticmethod
     def _title_template() -> str:
-        return "Last Week MEV Stat"
+        return "Last Week MEV Info"
 
     @staticmethod
     def _stats_templates() -> List[dict[str, str]]:
@@ -161,11 +163,11 @@ class WeekOverviewNumberOfSwaps(AbstractTemplate):
         ]
 
     @staticmethod
-    def generate_image(x: List[str], y: List[int | float]):
+    def _generate_image(x: List[str], y: List[int | float]):
         title = "Last Week MEV Swaps per type"
         xlabel = "MEV Type"
         ylabel = "Number of Swaps"
-        return generate_image(
+        return bar_plot(
             x=x,
             y=y,
             title=title,
@@ -177,7 +179,7 @@ class WeekOverviewNumberOfSwaps(AbstractTemplate):
 class WeekOverviewExtractedAmount(AbstractTemplate):
     @staticmethod
     def _title_template() -> str:
-        return "Last Week MEV Stat"
+        return "Last Week MEV Info"
 
     @staticmethod
     def _stats_templates() -> List[dict[str, str]]:
@@ -188,26 +190,76 @@ class WeekOverviewExtractedAmount(AbstractTemplate):
             },
         ]
 
+    @staticmethod
+    def _generate_image(x: List[str], y: List[int | float]):
+        title = "Last Week MEV Swaps per type"
+        xlabel = "Protocol"
+        ylabel = "MEV Users Loss ($)"
+        return bar_plot(
+            x=x,
+            y=y,
+            title=title,
+            xlabel=xlabel,
+            ylabel=ylabel,
+        )
+
 
 class WeekOverviewProfitAmount(AbstractTemplate):
     @staticmethod
     def _title_template() -> str:
-        return "Last Week MEV Stat"
+        return "Last Week MEV Info"
 
     @staticmethod
     def _stats_templates() -> List[dict[str, str]]:
         return [
             {
-                "name": "Total MEV Bots profit",
+                "name": "Total MEV Bots profit ($)",
                 "value": "{{mev_profit_amount}}",
             },
         ]
+
+    @staticmethod
+    def _generate_image(x: List[str], y: List[int | float]):
+        title = "Last Week MEV Extractor Profit Per Day"
+        xlabel = "Day"
+        ylabel = "MEV Extractor Profit ($)"
+        return bar_plot(
+            x=x,
+            y=y,
+            title=title,
+            xlabel=xlabel,
+            ylabel=ylabel,
+        )
+
+
+class WeekOverviewDex(AbstractTemplate):
+    @staticmethod
+    def _title_template() -> str:
+        return "Last Week MEV Info"
+
+    @staticmethod
+    def _stats_templates() -> List[dict[str, str]]:
+        return [
+            {
+                "name": "Total MEV in DEXs ($)",
+                "value": "{{mev_dex_amount}}",
+            },
+        ]
+
+    @staticmethod
+    def _generate_image(x: List[str], y: List[int | float]):
+        title = "Last Week MEV user losses per DEX"
+        return pie_plot(
+            x=x,
+            y=y,
+            title=title,
+        )
 
 
 class WeekOverviewVictims(AbstractTemplate):
     @staticmethod
     def _title_template() -> str:
-        return "Last Week MEV Stat"
+        return "Last Week MEV Info"
 
     @staticmethod
     def _stats_templates() -> List[dict[str, str]]:

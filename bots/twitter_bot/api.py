@@ -77,4 +77,4 @@ def tweet_thread(messages: List[dict[str, str]]) -> None:
     previous_tweet_id = None
     for message in messages:
         tweet = post_tweet(client, api, message, previous_tweet_id=previous_tweet_id)
-        previous_tweet_id = tweet.data["id"]
+        previous_tweet_id = tweet.data["id"]  # type: ignore

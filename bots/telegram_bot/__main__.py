@@ -71,6 +71,7 @@ def main():
 
     application.add_handler(CommandHandler("scan_address", scan_address))
     application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("start", help_command))
 
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 

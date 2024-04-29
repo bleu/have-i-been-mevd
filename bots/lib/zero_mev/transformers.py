@@ -46,7 +46,7 @@ def get_scan_address_data_from_mev_transactions(
     mev_by_protocol = mev_transactions.groupby("protocol")["user_loss_usd"].sum()
     most_mev_protocol_name = str(mev_by_protocol.idxmax())
     most_mev_protocol_usd_amount = float(mev_by_protocol.max())
-    mev_txs_length = int(mev_transactions["user_loss_usd"].count())
+    mev_txs_length = int(mev_transactions["user_swap_count"].sum())
 
     return ScanAddressData(
         address=address,

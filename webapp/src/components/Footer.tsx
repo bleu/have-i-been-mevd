@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="flex w-full justify-between text-sm md:text-md py-4 border border-x-0 border-b-0">
+    <footer className="flex w-full justify-between text-xs md:text-base py-4 border border-x-0 border-b-0">
       <span>
         developed by&nbsp;
         <a

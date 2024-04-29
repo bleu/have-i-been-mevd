@@ -1,5 +1,6 @@
 import { truncateAddress } from "#/utils/truncateAddress";
 import { Address } from "viem";
+import { CustomConnectButton } from "./CustomConnectButton";
 
 export function Header({ address }: { address?: Address }) {
   return (
@@ -10,7 +11,7 @@ export function Header({ address }: { address?: Address }) {
           {truncateAddress(address)}
         </span>
       ) : (
-        <span className="text-md text-info py-2 px-4">Not connected</span>
+        <CustomConnectButton />
       )}
     </div>
   );

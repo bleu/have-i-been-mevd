@@ -7,6 +7,8 @@ import { TradeOnCoWButton } from "./TradeOnCoWButton";
 import { BackToHomeButton } from "./BackToHomeButton";
 import { IAddressMevData } from "#/utils/zeroMevApi";
 import { formatNumber } from "@bleu-fi/ui";
+import { useEffect } from "react";
+import useSound from "use-sound";
 
 export function FreeMevReceipt({
   addressBytes,
@@ -70,11 +72,17 @@ export function MevReceipt({
 
   const twitterShareText = `I found out that this wallet ${addressName} is toasted, it lost ${totalAmountUsdFormatted} on ${mevData?.sum_user_swap_count || 0} MEV transactions. Install MEV Blocker: https://mevblocker.io\n\nScan your wallet using ${APP_URL}`;
 
+  const [play] = useSound("/sounds/bite.mp3");
+
+  useEffect(() => {
+    play();
+  }, [play]);
+
   return (
     <div className="bg-primary py-16 w-full h-full">
       <div className="flex flex-col h-full w-full items-center justify-between bg-gradient-diagonal-to-tr from-destructive-light to-destructive to-50% text-background">
-        <div className="top-sandwich-background h-2/5 " />
-        <div className="flex flex-col items-left h-full justify-between w-full md:w-1/2 px-5 gap-8">
+        <div className="top-sandwich-background h-2/5 slide-down" />
+        <div className="flex flex-col items-left h-full justify-between w-full md:w-1/2 px-5 gap-8 slideIn">
           <Header address={addressBytes} />
           <div className="flex flex-col gap-2 text-primary">
             <span className="text-3xl">This wallet is toast!</span>
@@ -101,7 +109,7 @@ export function MevReceipt({
           </div>
           <Footer />
         </div>
-        <div className="bottom-sandwich-background h-2/5" />
+        <div className="bottom-sandwich-background h-2/5 slide-up" />
       </div>
     </div>
   );

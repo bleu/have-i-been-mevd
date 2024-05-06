@@ -11,8 +11,8 @@ import { useEffect } from "react";
 import useSound from "use-sound";
 
 const PROTOCOL_NAME_FORMATTER = {
-  uniswap2: "Uni V2",
-  uniswap3: "Uni V3",
+  uniswap2: "Uniswap V2",
+  uniswap3: "Uniswap V3",
   multiple: "Multiple",
   zerox: "ZeroX",
   curve: "Curve",

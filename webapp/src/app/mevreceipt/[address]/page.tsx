@@ -6,7 +6,7 @@ import { Header } from "#/components/Header";
 import { Loading } from "#/components/Loading";
 import { FreeMevReceipt, MevReceipt } from "#/components/Receipts";
 import { publicClient } from "#/utils/publicClient";
-import { getMevSummarized, IAddressMevData } from "#/utils/zeroMevApi";
+import { scanAddressMEV, IAddressMevData } from "#/utils/zeroMevApi";
 import { useEffect, useState } from "react";
 import { Address } from "viem";
 
@@ -14,7 +14,7 @@ export default function Page({
   params,
 }: {
   params: {
-    address: Address | string;
+    address: Address;
   };
 }) {
   const [mevData, setMevData] = useState<IAddressMevData | undefined>();
@@ -29,7 +29,7 @@ export default function Page({
           }) as Promise<string>)
         : params.address;
       setAddressBytes(addressToCheck as Address);
-      const newMevData = await getMevSummarized(addressToCheck);
+      const newMevData = await scanAddressMEV(addressToCheck as Address);
       setMevData(newMevData);
       setLoading(false);
     }
@@ -53,7 +53,7 @@ export default function Page({
 
   return (
     <div className="flex w-full justify-center h-full">
-      {mevData && mevData?.sum_user_loss_usd ? (
+      {mevData && mevData?.totalAmountUsd ? (
         <MevReceipt
           mevData={mevData}
           addressBytes={addressBytes}

@@ -10,6 +10,25 @@ import { formatNumber } from "@bleu-fi/ui";
 import { useEffect } from "react";
 import useSound from "use-sound";
 
+const PROTOCOL_NAME_FORMATTER = {
+  uniswap2: "Uni V2",
+  uniswap3: "Uni V3",
+  multiple: "Multiple",
+  zerox: "ZeroX",
+  curve: "Curve",
+  balancer1: "Balancer V1",
+  bancor: "Bancor",
+  aave: "Aave",
+  compoundv2: "Compound V2",
+};
+
+function getProtocolName(protocol?: string) {
+  return (
+    PROTOCOL_NAME_FORMATTER[protocol as keyof typeof PROTOCOL_NAME_FORMATTER] ||
+    protocol
+  );
+}
+
 export function FreeMevReceipt({
   addressBytes,
   addressName,
@@ -67,10 +86,10 @@ export function MevReceipt({
   addressBytes: Address;
   addressName: string;
 }) {
-  const totalAmountUsdFormatted = `$${((mevData?.sum_user_loss_usd || 0) * -1).toFixed()}`;
-  const totalVolumeUsdFormatted = `$${formatNumber(mevData?.sum_user_swap_volume_usd || 0)}`;
+  const totalAmountUsdFormatted = `$${mevData?.totalAmountUsd.toFixed() || 0}`;
+  const mostMevProtocolUsdAmountFormatted = `$${formatNumber(mevData?.mostMevProtocolUsdAmount || 0)}`;
 
-  const twitterShareText = `I found out that this wallet ${addressName} is toasted, it lost ${totalAmountUsdFormatted} on ${mevData?.sum_user_swap_count || 0} MEV transactions. Install MEV Blocker: https://mevblocker.io\n\nScan your wallet using ${APP_URL}`;
+  const twitterShareText = `I found out that this wallet ${addressName} is toasted, it lost ${totalAmountUsdFormatted} on ${mevData?.mevTxsLength || 0} MEV transactions. Install MEV Blocker: https://mevblocker.io\n\nScan your wallet using ${APP_URL}`;
 
   const [play] = useSound("/sounds/bite.mp3");
 
@@ -89,14 +108,13 @@ export function MevReceipt({
             <span className="text-background font-extrabold text-6xl">
               {totalAmountUsdFormatted} eaten away
             </span>
-            <span className="text-3xl font-semibold">
+            <span className="text-2xl font-semibold ">
               in{" "}
+              <span className="font-bold">{mevData?.mevTxsLength} swaps, </span>
+              most on{" "}
               <span className="font-bold">
-                {mevData?.sum_user_swap_count} transactions{" "}
-              </span>
-              for a{" "}
-              <span className="font-bold">
-                volume of {totalVolumeUsdFormatted}
+                {getProtocolName(mevData?.mostMevProtocolName)} (
+                {mostMevProtocolUsdAmountFormatted})
               </span>
             </span>
             <div className="flex flex-col justify-center gap-4 text-background">

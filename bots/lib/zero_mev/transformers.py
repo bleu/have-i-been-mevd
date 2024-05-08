@@ -20,12 +20,13 @@ def preprocess(
     if mev_transactions.empty:
         return mev_transactions
 
-    mev_transactions["user_loss_usd"] = abs(
-        mev_transactions["user_loss_usd"]
+    mev_transactions["user_loss_usd"] = (
+        mev_transactions["user_loss_usd"].astype(float).abs()
     )  # TODO: Check if this is correct
-    mev_transactions["extractor_profit_usd"] = abs(
-        mev_transactions["extractor_profit_usd"]
-    )  # TODO: Check if this is correct
+    mev_transactions["extractor_profit_usd"] = (
+        mev_transactions["extractor_profit_usd"].astype(float).abs()
+    )
+    # TODO: Check if this is correct
     mev_transactions.dropna(subset=dropna_columns, inplace=True)
     if len(protocols_filter):
         mev_transactions = mev_transactions[

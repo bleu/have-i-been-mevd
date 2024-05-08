@@ -59,7 +59,7 @@ async def scan_address(
     )
     if mev_txs_with_user_loss.empty:
         await interaction.followup.send(
-            "No MEV transactions found for the provided address.",
+            f"No MEV transactions found for `{address}`",
             ephemeral=ephemeral,
         )
         return

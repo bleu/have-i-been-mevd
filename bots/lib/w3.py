@@ -38,3 +38,12 @@ def get_web3_contract(contract_address, abi_file_name):
         address=w3.to_checksum_address(contract_address),
         abi=_get_contract_abi(abi_file_name),
     )
+
+
+def get_address(address_or_ens_name: str):
+    """Get the address from the ENS name or address"""
+    w3 = get_web3_provider()
+    if w3.is_address(address_or_ens_name):
+        return address_or_ens_name
+
+    return w3.ens.address(address_or_ens_name)  # type: ignore

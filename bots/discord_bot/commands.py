@@ -8,7 +8,7 @@ from lib.zero_mev.transformers import (
     preprocess,
     get_scan_address_data_from_mev_transactions,
 )
-from lib.w3 import get_web3_provider
+from lib.w3 import get_address
 from lib.zero_mev.api import get_all_mev_transactions_related_to_address
 
 
@@ -24,7 +24,7 @@ bot = Bot(command_prefix="/", intents=intents)
     description="Check if how much funds an address lost on MEV.",
 )
 @app_commands.describe(
-    address="The address to be scanned",
+    address="The address or ENS name to be scanned.",
     privacy_preserving="If the bot reply should be private or not. Default is not private.",
 )
 @app_commands.choices(
@@ -45,14 +45,15 @@ async def scan_address(
     await interaction.response.defer(
         ephemeral=ephemeral,
     )
-    if not get_web3_provider().is_address(address):
+    address_bytes = get_address(address)
+    if not address_bytes:
         await interaction.followup.send(
             "Invalid address provided, please provide a valid Ethereum address.",
             ephemeral=ephemeral,
         )
         return
 
-    mev_txs = await get_all_mev_transactions_related_to_address(address)
+    mev_txs = await get_all_mev_transactions_related_to_address(address_bytes)
     mev_txs_with_user_loss = preprocess(
         mev_txs, type_filter=["sandwich"], dropna_columns=[]
     )

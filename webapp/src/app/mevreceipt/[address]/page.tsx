@@ -14,7 +14,7 @@ export default function Page({
   params,
 }: {
   params: {
-    address: Address;
+    address: Address | string;
   };
 }) {
   const [mevData, setMevData] = useState<IAddressMevData | undefined>();
@@ -26,7 +26,7 @@ export default function Page({
       const addressToCheck = params.address.includes(".eth")
         ? await (publicClient.getEnsAddress({
             name: normalize(params.address),
-          }) as Promise<string>)
+          }) as Promise<Address>)
         : params.address;
       setAddressBytes(addressToCheck as Address);
       const newMevData = await scanAddressMEV(addressToCheck as Address);
@@ -42,8 +42,8 @@ export default function Page({
   if (loading || !addressBytes) {
     return (
       <div className="flex w-full justify-center h-full">
-        <div className="flex flex-col items-center gap-8 justify-between w-1/2">
-          <Header />
+        <div className="flex flex-col items-center gap-8 justify-between w-full md:w-1/2">
+          <Header address={addressBytes} />
           <Loading />
           <Footer />
         </div>

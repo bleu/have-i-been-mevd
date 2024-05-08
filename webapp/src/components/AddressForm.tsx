@@ -20,7 +20,7 @@ export function AddressForm() {
   };
 
   return (
-    <div className="flex flex-col justify-center h-full w-full gap-8 mb-32">
+    <div className="flex flex-col justify-center h-full w-full gap-8 mb-32 px-5">
       <Form
         className="flex flex-col gap-4 w-full justify-center"
         {...form}
@@ -46,6 +46,7 @@ export function AddressForm() {
               type: "input",
               value: "",
             }}
+            style={{ display: "none" }}
           />
           <div className="space-y-2">
             <p className="text-muted-foreground text-sm" />

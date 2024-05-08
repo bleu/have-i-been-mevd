@@ -7,6 +7,27 @@ import { TradeOnCoWButton } from "./TradeOnCoWButton";
 import { BackToHomeButton } from "./BackToHomeButton";
 import { IAddressMevData } from "#/utils/zeroMevApi";
 import { formatNumber } from "@bleu-fi/ui";
+import { useEffect } from "react";
+import useSound from "use-sound";
+
+const PROTOCOL_NAME_FORMATTER = {
+  uniswap2: "Uniswap V2",
+  uniswap3: "Uniswap V3",
+  multiple: "Multiple",
+  zerox: "ZeroX",
+  curve: "Curve",
+  balancer1: "Balancer V1",
+  bancor: "Bancor",
+  aave: "Aave",
+  compoundv2: "Compound V2",
+};
+
+function getProtocolName(protocol?: string) {
+  return (
+    PROTOCOL_NAME_FORMATTER[protocol as keyof typeof PROTOCOL_NAME_FORMATTER] ||
+    protocol
+  );
+}
 
 export function FreeMevReceipt({
   addressBytes,
@@ -18,7 +39,7 @@ export function FreeMevReceipt({
   const twitterShareText = `I found out that the address ${addressName} is MEV-free. Check if your address lost money to MEV bots at ${APP_URL}`;
 
   return (
-    <div className="flex flex-col items-left gap-8 justify-between w-1/2">
+    <div className="flex flex-col items-left gap-8 justify-between w-full md:w-1/2 px-5">
       <Header address={addressBytes} />
       <div className="flex flex-col justify-center gap-4">
         <Image
@@ -65,30 +86,37 @@ export function MevReceipt({
   addressBytes: Address;
   addressName: string;
 }) {
-  const totalAmountUsdFormatted = `$${((mevData?.sum_user_loss_usd || 0) * -1).toFixed()}`;
-  const totalVolumeUsdFormatted = `$${formatNumber(mevData?.sum_user_swap_volume_usd || 0)}`;
+  const totalAmountUsdFormatted = `$${mevData?.totalAmountUsd.toFixed() || 0}`;
+  const mostMevProtocolUsdAmountFormatted = `$${formatNumber(mevData?.mostMevProtocolUsdAmount || 0)}`;
 
-  const twitterShareText = `I found out that this wallet ${addressName} is toasted, it lost ${totalAmountUsdFormatted} on ${mevData?.sum_user_swap_count || 0} MEV transactions. Install MEV Blocker: https://mevblocker.io\n\nScan your wallet using ${APP_URL}`;
+  const twitterShareText = `I found out that this wallet ${addressName} is toasted, it lost ${totalAmountUsdFormatted} on ${mevData?.mevTxsLength || 0} MEV transactions. Install MEV Blocker: https://mevblocker.io\n\nScan your wallet using ${APP_URL}`;
+
+  const [play] = useSound("/sounds/bite.mp3");
+
+  useEffect(() => {
+    if (navigator.userActivation.hasBeenActive) {
+      play();
+    }
+  }, [play]);
 
   return (
     <div className="bg-primary py-16 w-full h-full">
       <div className="flex flex-col h-full w-full items-center justify-between bg-gradient-diagonal-to-tr from-destructive-light to-destructive to-50% text-background">
-        <div className="top-sandwich-background h-2/5 " />
-        <div className="flex flex-col items-left h-full justify-between w-1/2 gap-8">
+        <div className="top-sandwich-background h-2/5 slide-down" />
+        <div className="flex flex-col items-left h-full justify-between w-full md:w-1/2 px-5 gap-8 slideIn">
           <Header address={addressBytes} />
           <div className="flex flex-col gap-2 text-primary">
             <span className="text-3xl">This wallet is toast!</span>
             <span className="text-background font-extrabold text-6xl">
               {totalAmountUsdFormatted} eaten away
             </span>
-            <span className="text-3xl font-semibold">
+            <span className="text-2xl font-semibold ">
               in{" "}
+              <span className="font-bold">{mevData?.mevTxsLength} swaps, </span>
+              most on{" "}
               <span className="font-bold">
-                {mevData?.sum_user_swap_count} transactions{" "}
-              </span>
-              for a{" "}
-              <span className="font-bold">
-                volume of {totalVolumeUsdFormatted}
+                {getProtocolName(mevData?.mostMevProtocolName)} (
+                {mostMevProtocolUsdAmountFormatted})
               </span>
             </span>
             <div className="flex flex-col justify-center gap-4 text-background">
@@ -101,7 +129,7 @@ export function MevReceipt({
           </div>
           <Footer />
         </div>
-        <div className="bottom-sandwich-background h-2/5" />
+        <div className="bottom-sandwich-background h-2/5 slide-up" />
       </div>
     </div>
   );

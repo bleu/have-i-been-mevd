@@ -6,7 +6,7 @@ import { Header } from "#/components/Header";
 import { Loading } from "#/components/Loading";
 import { FreeMevReceipt, MevReceipt } from "#/components/Receipts";
 import { publicClient } from "#/utils/publicClient";
-import { getMevSummarized, IAddressMevData } from "#/utils/zeroMevApi";
+import { scanAddressMEV, IAddressMevData } from "#/utils/zeroMevApi";
 import { useEffect, useState } from "react";
 import { Address } from "viem";
 
@@ -26,10 +26,10 @@ export default function Page({
       const addressToCheck = params.address.includes(".eth")
         ? await (publicClient.getEnsAddress({
             name: normalize(params.address),
-          }) as Promise<string>)
+          }) as Promise<Address>)
         : params.address;
       setAddressBytes(addressToCheck as Address);
-      const newMevData = await getMevSummarized(addressToCheck);
+      const newMevData = await scanAddressMEV(addressToCheck as Address);
       setMevData(newMevData);
       setLoading(false);
     }
@@ -42,8 +42,8 @@ export default function Page({
   if (loading || !addressBytes) {
     return (
       <div className="flex w-full justify-center h-full">
-        <div className="flex flex-col items-center gap-8 justify-between w-1/2">
-          <Header />
+        <div className="flex flex-col items-center gap-8 justify-between w-full md:w-1/2">
+          <Header address={addressBytes} />
           <Loading />
           <Footer />
         </div>
@@ -53,7 +53,7 @@ export default function Page({
 
   return (
     <div className="flex w-full justify-center h-full">
-      {mevData && mevData?.sum_user_loss_usd ? (
+      {mevData && mevData?.totalAmountUsd ? (
         <MevReceipt
           mevData={mevData}
           addressBytes={addressBytes}

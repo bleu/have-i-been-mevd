@@ -58,4 +58,39 @@ div[data-rk] {
   background-size: auto 100%; 
   width: 100%;
   }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .slide-down {
+    animation: slideDown 0.5s ease-out forwards;
+  }
+
+  /* Slide Up */
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .slide-up {
+    animation: slideUp  0.5s ease-out forwards;
+  }
+
+  
 }
+
+

@@ -1,12 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Form, Button, InputField } from "@bleu-fi/ui";
 import { scanAddressSchema } from "#/utils/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { CustomConnectButton } from "./CustomConnectButton";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 export function AddressForm() {
@@ -22,7 +20,7 @@ export function AddressForm() {
   };
 
   return (
-    <div className="flex flex-col justify-center h-full w-full gap-8 mb-32">
+    <div className="flex flex-col justify-center h-full w-full gap-8 mb-32 px-5">
       <Form
         className="flex flex-col gap-4 w-full justify-center"
         {...form}
@@ -31,11 +29,11 @@ export function AddressForm() {
           handleSubmit(onSubmit)();
         }}
       >
-        <div className="flex flex-row gap-2 justify-between items-end">
-          <p className="text-2xl text">
-            Wanna know if you’ve left crumbs <br /> on the table?
+        <div className="flex flex-row gap-2 justify-between items-end w-full">
+          <p className="text-2xl md:text-4xl text-wrap w-3/5">
+            Wanna know if you’ve left crumbs on the table?
           </p>
-          <Image src={"/assets/crumbs.svg"} height={200} width={200} alt="" />
+          <img src={"/assets/crumbs.svg"} className="max-w-none" alt="" />
         </div>
         <div className="flex flex-row justify-between items-start gap-2">
           <InputField
@@ -48,6 +46,7 @@ export function AddressForm() {
               type: "input",
               value: "",
             }}
+            style={{ display: "none" }}
           />
           <div className="space-y-2">
             <p className="text-muted-foreground text-sm" />
@@ -61,10 +60,6 @@ export function AddressForm() {
           </div>
         </div>
       </Form>
-      <div className="flex flex-row gap-2 items-center">
-        <span>or</span>
-        <CustomConnectButton />
-      </div>
     </div>
   );
 }

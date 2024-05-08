@@ -23,7 +23,7 @@ export function Loading() {
   }, []);
 
   return (
-    <div className="flex flex-row w-full h-full justify-center items-center gap-8">
+    <div className="flex flex-col md:flex-row w-full h-full justify-center items-center gap-8">
       <Image
         src={images[currentImageIndex]}
         alt="Loading..."

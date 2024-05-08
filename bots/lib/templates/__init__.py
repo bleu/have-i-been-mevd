@@ -1,6 +1,5 @@
-from typing import Dict, List
+from typing import List
 import discord
-from matplotlib.pyplot import xlabel
 import pystache
 from abc import ABC, abstractmethod
 from lib.templates.images import bar_plot, pie_plot

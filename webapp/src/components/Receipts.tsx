@@ -94,7 +94,9 @@ export function MevReceipt({
   const [play] = useSound("/sounds/bite.mp3");
 
   useEffect(() => {
-    play();
+    if (navigator.userActivation.hasBeenActive) {
+      play();
+    }
   }, [play]);
 
   return (

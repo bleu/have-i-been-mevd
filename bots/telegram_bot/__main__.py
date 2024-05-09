@@ -60,7 +60,7 @@ async def scan_address(update: Update, context: CallbackContext):
 
 async def help_command(update: Update, context: CallbackContext):
     help_text = (
-        "Welcome to the MEV Scanner Bot! Here are the commands you can use:\n\n"
+        "Welcome to the MEV Block Scanner Bot! Here are the commands you can use:\n\n"
         "/scan_address <address | ens_name> - reply with how much MEV a wallet has suffered.\n"
         "/help - Shows this help message."
     )

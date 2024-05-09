@@ -8,19 +8,13 @@ import web3
 @cache
 def get_web3_provider():
     """Returns Web3 Provider"""
-    return web3.Web3(
-        web3.HTTPProvider(f"https://eth.llamarpc.com/rpc/01GYHXMVJ2H51X5M316Z8CYEXM")
-    )
+    return web3.Web3(web3.HTTPProvider("https://ethereum-rpc.publicnode.com"))
 
 
 @cache
 def get_web3_async_provider():
     """Returns Web3 Async Provider"""
-    return web3.AsyncWeb3(
-        web3.AsyncHTTPProvider(
-            f"https://eth.llamarpc.com/rpc/01GYHXMVJ2H51X5M316Z8CYEXM"
-        )
-    )
+    return web3.AsyncWeb3(web3.AsyncHTTPProvider("https://ethereum-rpc.publicnode.com"))
 
 
 @cache

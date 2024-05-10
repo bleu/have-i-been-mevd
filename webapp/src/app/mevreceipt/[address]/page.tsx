@@ -14,12 +14,11 @@ export default function Page({
   params,
 }: {
   params: {
-    address: Address | string;
+    address: string;
   };
 }) {
   const [mevData, setMevData] = useState<IAddressMevData | undefined>();
   const [loading, setLoading] = useState(true);
-  const [addressBytes, setAddressBytes] = useState<Address>();
 
   async function loadData() {
     if (params.address) {
@@ -28,7 +27,6 @@ export default function Page({
             name: normalize(params.address),
           }) as Promise<Address>)
         : params.address;
-      setAddressBytes(addressToCheck as Address);
       const newMevData = await scanAddressMEV(addressToCheck as Address);
       setMevData(newMevData);
       setLoading(false);
@@ -39,11 +37,11 @@ export default function Page({
     loadData();
   }, [params.address]);
 
-  if (loading || !addressBytes) {
+  if (loading) {
     return (
       <div className="flex w-full justify-center h-full">
         <div className="flex flex-col items-center gap-8 justify-between w-full md:w-1/2">
-          <Header address={addressBytes} />
+          <Header address={params.address} />
           <Loading />
           <Footer />
         </div>
@@ -54,16 +52,9 @@ export default function Page({
   return (
     <div className="flex w-full justify-center h-full">
       {mevData && mevData?.totalAmountUsd ? (
-        <MevReceipt
-          mevData={mevData}
-          addressBytes={addressBytes}
-          addressName={params.address}
-        />
+        <MevReceipt mevData={mevData} address={params.address} />
       ) : (
-        <FreeMevReceipt
-          addressBytes={addressBytes}
-          addressName={params.address}
-        />
+        <FreeMevReceipt address={params.address} />
       )}
     </div>
   );

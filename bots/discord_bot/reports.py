@@ -3,13 +3,13 @@ import pandas as pd
 
 
 from lib.zero_mev.api import get_all_mev_transactions_on_last_week
-from lib.zero_mev.transformers import preprocess
 from lib.templates import (
     WeekOverviewNumberOfSwaps,
     WeekOverviewExtractedAmount,
     WeekOverviewProfitAmount,
     WeekOverviewVictims,
     WeekOverviewDex,
+    format_protocol_name,
 )
 
 
@@ -91,6 +91,7 @@ async def dex_report():
         ],
         type_filter=["sandwich"],
     )
+    txs["protocol"] = txs["protocol"].apply(format_protocol_name)  # type: ignore
 
     loss_amount = txs["user_loss_usd"].sum()
     mev_per_dex = (

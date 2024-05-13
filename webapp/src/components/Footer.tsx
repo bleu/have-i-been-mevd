@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="flex w-full justify-between text-sm md:text-base px-2 py-4 border border-x-0 border-b-0">
+    <footer className="flex w-full justify-between text-xs md:text-sm px-2 py-4 border border-x-0 border-b-0">
       <span>
         developed by&nbsp;
         <a
@@ -20,20 +20,16 @@ export function Footer() {
         >
           zeromev
         </a>
+        &nbsp;and funded by the&nbsp;
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://cow.fi/"
+          className="font-extrabold"
+        >
+          CoW DAO Grants Program
+        </a>
       </span>
-      <div className="float-right flex flex-row items-center space-x-4">
-        <div>
-          Visit&nbsp;
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://cow.fi/"
-            className="font-extrabold underline underline-offset-4"
-          >
-            CoW Swap
-          </a>
-        </div>
-      </div>
     </footer>
   );
 }

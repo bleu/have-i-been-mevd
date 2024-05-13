@@ -1,6 +1,6 @@
 import os
 from typing import List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import tweepy
 
@@ -45,7 +45,7 @@ class TwitterAPI:
         self,
         look_back_timedelta: timedelta = timedelta(minutes=20),
     ) -> List[tweepy.Tweet]:
-        start_time = datetime.now() - look_back_timedelta
+        start_time = datetime.now(timezone.utc) - look_back_timedelta
 
         # Convert to required string format
         start_time_str = start_time.strftime("%Y-%m-%dT%H:%M:%SZ")

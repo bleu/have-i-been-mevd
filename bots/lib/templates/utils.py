@@ -61,3 +61,17 @@ def format_currency(number, decimals=1, show_magnitude=True):
 
 def format_date(time=time()):
     return date.fromtimestamp(int(time)).strftime("%d %b, %Y")
+
+
+def format_protocol_name(name):
+    if name == "uniswap2":
+        return "Uniswap V2"
+    if name == "uniswap3":
+        return "Uniswap V3"
+    if name == "zerox":
+        return "ZeroX"
+    if name == "balancer1":
+        return "Balancer V1"
+    if name == "compoundv2":
+        return "Compound V2"
+    return name.capitalize()

@@ -4,6 +4,7 @@ import httpx
 import pandas as pd
 from retry_async import retry
 from lib.latest_eth_block import get_latest_eth_block
+from lib.zero_mev.transformers import preprocess
 
 
 API_BASE_URL = "https://data.zeromev.org/v1"
@@ -25,7 +26,7 @@ async def get_all_mev_transactions_related_to_address(address: str) -> pd.DataFr
     return pd.DataFrame(data=all_data)
 
 
-async def get_all_mev_transactions_on_last_week() -> pd.DataFrame:
+async def get_all_mev_transactions_on_last_week(**preprocess_kwargs) -> pd.DataFrame:
     logging.info(f"Getting all last week mev transactions")
     latest_eth_block_number = await get_latest_eth_block()
     eth_block_number_1_week_ago = (
@@ -37,14 +38,18 @@ async def get_all_mev_transactions_on_last_week() -> pd.DataFrame:
 
     async with httpx.AsyncClient() as client:
         for block in range(eth_block_number_1_week_ago, latest_eth_block_number, 100):
-            task = asyncio.create_task(bounded_fetch(sem, client, block, 100))
+            task = asyncio.create_task(
+                bounded_fetch_with_preprocess(
+                    sem, client, block, 100, **preprocess_kwargs
+                )
+            )
             tasks.append(task)
 
             if len(tasks) >= MAX_CALLS_PER_SECOND:
                 await asyncio.sleep(1)
 
-        responses = [tx for response in await asyncio.gather(*tasks) for tx in response]
-        return pd.DataFrame(data=responses)
+        responses = [response for response in await asyncio.gather(*tasks)]
+        return pd.concat(responses)
 
 
 @retry(
@@ -70,12 +75,13 @@ async def fetch_all_mev_from_block(
     return r.json()
 
 
-async def bounded_fetch(
+async def bounded_fetch_with_preprocess(
     sem: asyncio.Semaphore,
     client: httpx.AsyncClient,
     block_number: int,
     count: int = 100,
+    **preprocess_kwargs,
 ):
     async with sem:
         data = await fetch_all_mev_from_block(client, block_number, count)  # type: ignore
-        return data
+        return preprocess(pd.DataFrame(data=data), **preprocess_kwargs)

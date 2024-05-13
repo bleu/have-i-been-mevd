@@ -4,14 +4,14 @@ import pystache
 from abc import ABC, abstractmethod
 from lib.templates.images import bar_plot, pie_plot
 from lib.templates.utils import (
-    capitalize_first_letter,
     format_currency,
+    format_protocol_name,
 )
 
 data_formatter_configs = [
     {"key": "total_amount_usd", "formatter": format_currency},
     {"key": "most_mev_protocol_usd_amount", "formatter": format_currency},
-    {"key": "most_mev_protocol_name", "formatter": capitalize_first_letter},
+    {"key": "most_mev_protocol_name", "formatter": format_protocol_name},
     {"key": "mev_txs_length", "formatter": str},
     {"key": "address", "formatter": str},
     {"key": "mev_swaps_number", "formatter": str},

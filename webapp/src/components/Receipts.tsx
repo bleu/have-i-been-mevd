@@ -29,7 +29,7 @@ function getProtocolName(protocol?: string) {
 }
 
 export function FreeMevReceipt({ address }: { address: string }) {
-  const twitterShareText = `I found out that the address ${address} is MEV-free. Check if your address lost money to MEV bots at ${APP_URL}`;
+  const twitterShareText = `I found out that the address ${address} is MEV-free 🙌, that's the power of MEV Blockers protection!\n\nCheck if your address lost money to MEV bots at ${APP_URL}`;
 
   return (
     <div className="flex flex-col items-left gap-8 justify-between w-full md:w-1/2 px-5">
@@ -80,7 +80,7 @@ export function MevReceipt({
   const totalAmountUsdFormatted = `$${mevData?.totalAmountUsd.toFixed() || 0}`;
   const mostMevProtocolUsdAmountFormatted = `$${formatNumber(mevData?.mostMevProtocolUsdAmount || 0)}`;
 
-  const twitterShareText = `I found out that this wallet ${address} is toasted, it lost ${totalAmountUsdFormatted} on ${mevData?.mevTxsLength || 0} MEV transactions. Install MEV Blocker: https://mevblocker.io\n\nScan your wallet using ${APP_URL}`;
+  const twitterShareText = `My wallet is toast! 🥪🤖\n\nI lost ${totalAmountUsdFormatted} on ${mevData?.mevTxsLength} MEV transactions because I didn't use MEV Blocker. ⛱️\nSee how much you've lost: ${APP_URL}`;
 
   const [play] = useSound("/sounds/bite.mp3");
 
@@ -104,7 +104,7 @@ export function MevReceipt({
             <span className="text-2xl font-semibold ">
               in{" "}
               <span className="font-bold">{mevData?.mevTxsLength} swaps, </span>
-              most on{" "}
+              mostly on{" "}
               <span className="font-bold">
                 {getProtocolName(mevData?.mostMevProtocolName)} (
                 {mostMevProtocolUsdAmountFormatted})

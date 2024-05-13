@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { APP_URL, TwitterShareButton } from "./TwitterShareButton";
-import { TradeOnCoWButton } from "./TradeOnCoWButton";
+import { InstallMEVBlockerButton } from "./InstallMEVBlockerButton";
 import { BackToHomeButton } from "./BackToHomeButton";
 import { IAddressMevData } from "#/utils/zeroMevApi";
 import { formatNumber } from "@bleu-fi/ui";
@@ -62,7 +62,7 @@ export function FreeMevReceipt({ address }: { address: string }) {
         <div className="flex flex-row gap-2">
           <BackToHomeButton />
           <TwitterShareButton text={twitterShareText} />
-          <TradeOnCoWButton />
+          <InstallMEVBlockerButton />
         </div>
       </div>
       <Footer />
@@ -114,7 +114,7 @@ export function MevReceipt({
               <div className="flex flex-row gap-2">
                 <BackToHomeButton />
                 <TwitterShareButton text={twitterShareText} />
-                <TradeOnCoWButton />
+                <InstallMEVBlockerButton />
               </div>
             </div>
           </div>

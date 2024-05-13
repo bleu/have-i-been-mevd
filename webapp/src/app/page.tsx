@@ -8,16 +8,24 @@ import { config } from "#/wagmi/client";
 import { disconnect } from "@wagmi/core";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { publicClient } from "#/utils/publicClient";
+import { Address } from "viem";
 
 export default function Page() {
   const { address, isConnected } = useAccount();
 
   const router = useRouter();
 
-  useEffect(() => {
+  async function pushToReceipt(address?: Address, isConnected?: boolean) {
     if (address && isConnected) {
-      router.push(`/mevreceipt/${address}`);
+      const ensName = await publicClient.getEnsName({ address });
+      const receiptString = ensName ? ensName : address;
+      router.push(`/mevreceipt/${receiptString}`);
     }
+  }
+
+  useEffect(() => {
+    pushToReceipt(address, isConnected);
   }, [address]);
 
   useEffect(() => {

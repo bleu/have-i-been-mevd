@@ -9,7 +9,7 @@ import { mainnet } from "wagmi/chains";
  * Credentials for WalletConnect are available at 1Password
  */
 
-const appName = "Have I Been Mev'ed";
+const appName = "Have I Been Mev'd";
 const projectId = "4f98524b2b9b5a80d14a519a8dcbecc2";
 const chains = [mainnet] as const;
 

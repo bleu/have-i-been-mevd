@@ -18,7 +18,7 @@ export function RootLayout({ children }: React.PropsWithChildren) {
 
   return (
     <>
-      <WagmiProvider config={config}>
+      <WagmiProvider config={config} reconnectOnMount={false}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider
             initialChain={mainnet}

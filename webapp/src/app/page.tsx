@@ -3,34 +3,28 @@
 import { AddressForm } from "#/components/AddressForm";
 import { Footer } from "#/components/Footer";
 import { Header } from "#/components/Header";
-import { useAccount } from "#/wagmi";
-import { config } from "#/wagmi/client";
-import { disconnect } from "@wagmi/core";
+import { useAccountEffect } from "#/wagmi";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { publicClient } from "#/utils/publicClient";
 import { Address } from "viem";
+import { useEffect } from "react";
 
 export default function Page() {
-  const { address, isConnected } = useAccount();
-
-  const router = useRouter();
-
-  async function pushToReceipt(address?: Address, isConnected?: boolean) {
-    if (address && isConnected) {
+  async function pushToReceipt(address?: Address) {
+    if (address) {
       const ensName = await publicClient.getEnsName({ address });
       const receiptString = ensName ? ensName : address;
       router.push(`/mevreceipt/${receiptString}`);
     }
   }
-
-  useEffect(() => {
-    pushToReceipt(address, isConnected);
-  }, [address]);
-
-  useEffect(() => {
-    disconnect(config);
+  const router = useRouter();
+  useAccountEffect({
+    onConnect(data) {
+      pushToReceipt(data.address);
+    },
   });
+
+  useEffect;
 
   return (
     <div className="flex w-full justify-center h-full">

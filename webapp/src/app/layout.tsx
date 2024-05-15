@@ -8,10 +8,10 @@ export const metadata: Metadata = {
   title: `MEV Scanner`,
   description: "Check how much funds you could have saved with MEV Blocker",
   twitter: {
-    images: "/assets/preview-image.png",
+    images: "https://have-i-been-mevd.bleu.fi/assets/preview-image.png",
   },
   openGraph: {
-    images: "/assets/preview-image.png",
+    images: "https://have-i-been-mevd.bleu.fi/assets/preview-image.png",
   },
 };
 

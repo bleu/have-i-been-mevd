@@ -80,7 +80,7 @@ export function MevReceipt({
   const totalAmountUsdFormatted = `$${mevData?.totalAmountUsd.toFixed() || 0}`;
   const mostMevProtocolUsdAmountFormatted = `$${formatNumber(mevData?.mostMevProtocolUsdAmount || 0)}`;
 
-  const twitterShareText = `My wallet is toast! 🥪🤖\n\nI lost ${totalAmountUsdFormatted} on ${mevData?.mevTxsLength} MEV transactions because I didn't use MEV Blocker. ⛱️\nSee how much you've lost: ${APP_URL}`;
+  const twitterShareText = `My wallet is toast! 🥪🤖\n\nI lost ${totalAmountUsdFormatted} on ${mevData?.mevTxsLength} MEV transactions because I didn't use MEV Blocker. ⛱️\n\nSee how much you've lost: ${APP_URL}`;
 
   const [play] = useSound("/sounds/bite.mp3");
 

@@ -10,6 +10,7 @@ class TwitterAPI:
         self.client_v2 = self._get_client_v2()
         self.client_v1 = self._get_client_v1()
         self.tweet_response_limit = 20
+        self.bot_id = self.get_me_id()
 
     def _get_client_v2(self) -> tweepy.Client:
         """Returns V2 version of API client
@@ -51,21 +52,9 @@ class TwitterAPI:
         start_time_str = start_time.strftime("%Y-%m-%dT%H:%M:%SZ")
 
         return self.client_v2.get_users_mentions(
-            id=self.get_me_id(),
+            id=self.bot_id,
             start_time=start_time_str,
         ).data  # type: ignore
-
-    def get_last_replied_tweets_ids(self):
-        # Returns the ID of the last tweet replied to
-        tweets = self.client_v2.get_users_tweets(id=self.get_me_id(), expansions=["referenced_tweets.id"], tweet_fields=["referenced_tweets"]).data  # type: ignore
-        referenced_tweets_lists = [
-            tweet.referenced_tweets for tweet in tweets if tweet.referenced_tweets
-        ]
-        return [
-            referend_tweet.id
-            for referenced_tweet_list in referenced_tweets_lists
-            for referend_tweet in referenced_tweet_list
-        ]
 
     def post_tweet(
         self,

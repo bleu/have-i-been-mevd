@@ -16,25 +16,36 @@ from lib.zero_mev.transformers import (
     get_scan_address_data_from_mev_transactions,
 )
 from twitter_bot.api import TwitterAPI
+from twitter_bot.database import DatabaseRepliedTweets
 
 
 async def reply_on_mentions():
-    logging.info("Replying on mentions")
-    twitter_api = TwitterAPI()
-    mentions = twitter_api.get_mentions()
-    if not mentions:
-        return
-    last_replied_tweets_ids = twitter_api.get_last_replied_tweets_ids()
-    mentions_to_reply = filter_not_replied_mentions(last_replied_tweets_ids, mentions)
-    await asyncio.gather(
-        *[reply_on_mention(twitter_api, mention) for mention in mentions_to_reply]
-    )
+    with DatabaseRepliedTweets() as database_replied_tweets:
+        database_replied_tweets.clean_1_day_old_replies()
+        logging.info("Replying on mentions")
+        twitter_api = TwitterAPI()
+        mentions = twitter_api.get_mentions()
+        if not mentions:
+            return
+        mentions_to_reply = filter_not_replied_mentions(
+            mentions, database_replied_tweets
+        )
+        await asyncio.gather(
+            *[reply_on_mention(twitter_api, mention) for mention in mentions_to_reply]
+        )
+        database_replied_tweets.insert_tweet_ids(
+            [mention["id"] for mention in mentions_to_reply]
+        )
 
 
 def filter_not_replied_mentions(
-    last_replied_tweets: List[int], mentions: List[tweepy.Tweet]
+    mentions: List[tweepy.Tweet], database_replied_tweets: DatabaseRepliedTweets
 ) -> List[tweepy.Tweet]:
-    return [mention for mention in mentions if mention["id"] not in last_replied_tweets]
+    return [
+        mention
+        for mention in mentions
+        if database_replied_tweets.check_if_tweet_was_replied_to(mention["id"]) is False
+    ]
 
 
 async def reply_on_mention(twitter_api: TwitterAPI, mention: tweepy.Tweet):

@@ -191,7 +191,7 @@ class WeekOverviewExtractedAmount(AbstractTemplate):
 
     @staticmethod
     def _generate_image(x: List[str], y: List[int | float]):
-        title = "Last Week MEV Swaps per type"
+        title = "Last Week MEV User Loss per protocol"
         xlabel = "Protocol"
         ylabel = "MEV Users Loss ($)"
         return bar_plot(

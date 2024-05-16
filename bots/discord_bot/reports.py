@@ -91,8 +91,6 @@ async def dex_report():
         ],
         type_filter=["sandwich"],
     )
-    txs["protocol"] = txs["protocol"].apply(format_protocol_name)  # type: ignore
-
     loss_amount = txs["user_loss_usd"].sum()
     mev_per_dex = (
         txs.groupby("protocol").user_loss_usd.sum().sort_values(ascending=False)

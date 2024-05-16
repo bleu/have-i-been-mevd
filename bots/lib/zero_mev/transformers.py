@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 import pandas as pd
 
+from lib.templates.utils import format_mev_type_name, format_protocol_name
+
 
 @dataclass
 class ScanAddressData:
@@ -37,6 +39,12 @@ def preprocess(
             mev_transactions["mev_type"].isin(type_filter)
         ]  # type: ignore
 
+    mev_transactions["protocol"] = mev_transactions["protocol"].apply(
+        format_protocol_name
+    )
+    mev_transactions["mev_type"] = mev_transactions["mev_type"].apply(
+        format_mev_type_name
+    )
     return mev_transactions
 
 

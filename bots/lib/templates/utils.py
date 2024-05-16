@@ -75,3 +75,11 @@ def format_protocol_name(name):
     if name == "compoundv2":
         return "Compound V2"
     return name.capitalize()
+
+
+def format_mev_type_name(name):
+    if name == "arb":
+        return "Arbitrage"
+    if name == "liquid":
+        return "Liquidation"
+    return name.capitalize()

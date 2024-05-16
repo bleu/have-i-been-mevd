@@ -53,12 +53,12 @@ async def reply_on_mention(twitter_api: TwitterAPI, mention: tweepy.Tweet):
     eth_address = extract_eth_address(mention["text"])
     address_bytes = get_address(eth_address)
     if not address_bytes:
-        twitter_api.post_tweet(
-            {
-                "text": "Invalid Ethereum address found in the tweet. Please provide a valid Ethereum address or ENS name on the tweet text."
-            },
-            previous_tweet_id=mention["id"],
-        )
+        # twitter_api.post_tweet(
+        #     {
+        #         "text": "Invalid Ethereum address found in the tweet. Please provide a valid Ethereum address or ENS name on the tweet text."
+        #     },
+        #     previous_tweet_id=mention["id"],
+        # )
         return
 
     mev_txs = await get_all_mev_transactions_related_to_address(address_bytes)  # type: ignore

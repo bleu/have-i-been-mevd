@@ -13,8 +13,8 @@ class DatabaseRepliedTweets:
         self.conn.close()
 
     def _get_or_create_database(self) -> sqlite3.Connection:
-        db_exists = os.path.exists("data/replies.db")
-        conn = sqlite3.connect("data/replies.db", detect_types=sqlite3.PARSE_DECLTYPES)
+        db_exists = os.path.exists("/data/replies.db")
+        conn = sqlite3.connect("/data/replies.db", detect_types=sqlite3.PARSE_DECLTYPES)
         if not db_exists:
             logging.debug("Creating sqlite DB")
             cursor = conn.cursor()

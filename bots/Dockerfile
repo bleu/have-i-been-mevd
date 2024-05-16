@@ -97,6 +97,8 @@ COPY ./telegram_bot /app/telegram_bot
 COPY ./lib /app/lib
 COPY ./Procfile.fly /app/Procfile
 
+RUN mkdir -p /data
+
 WORKDIR /app
 
 ENTRYPOINT /entrypoint.sh $0 $@

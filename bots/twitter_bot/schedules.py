@@ -29,6 +29,14 @@ async def weekly_report():
     twitter_api.post_tweet(message)
 
 
+async def post_all_reports():
+    logging.info("Posting all reports")
+    twitter_api = TwitterAPI()
+    for report in REPORTS_LIST:
+        message = await report()
+        twitter_api.post_tweet(message)
+
+
 SCHEDULE = [
     ["monday", "14:00", weekly_report, asyncio.create_task],
     ["minutes", ":02", reply_on_mentions, asyncio.create_task],

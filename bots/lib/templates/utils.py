@@ -55,6 +55,10 @@ def format_number(number, decimals=1, show_magnitude=True):
     return f"{float(number):,.{decimals}f}{magnitude_unit}"
 
 
+def format_integer(number):
+    return format_number(number, 0, show_magnitude=False)
+
+
 def format_currency(number, decimals=1, show_magnitude=True):
     return f"${format_number(number, decimals, show_magnitude)}"
 

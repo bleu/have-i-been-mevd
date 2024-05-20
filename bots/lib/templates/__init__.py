@@ -3,21 +3,18 @@ import discord
 import pystache
 from abc import ABC, abstractmethod
 from lib.templates.images import bar_plot, pie_plot
-from lib.templates.utils import (
-    format_currency,
-    format_protocol_name,
-)
+from lib.templates.utils import format_currency, format_protocol_name, format_integer
 
 data_formatter_configs = [
     {"key": "total_amount_usd", "formatter": format_currency},
     {"key": "most_mev_protocol_usd_amount", "formatter": format_currency},
     {"key": "most_mev_protocol_name", "formatter": format_protocol_name},
-    {"key": "mev_txs_length", "formatter": str},
+    {"key": "mev_txs_length", "formatter": format_integer},
     {"key": "address", "formatter": str},
-    {"key": "mev_swaps_number", "formatter": str},
+    {"key": "mev_swaps_number", "formatter": format_integer},
     {"key": "mev_extracted_amount", "formatter": format_currency},
     {"key": "mev_profit_amount", "formatter": format_currency},
-    {"key": "mev_victims_number", "formatter": str},
+    {"key": "mev_victims_number", "formatter": format_integer},
     {"key": "mev_dex_amount", "formatter": format_currency},
 ]
 
@@ -150,7 +147,7 @@ class AddressScanTemplate(AbstractTemplate):
 class WeekOverviewNumberOfSwaps(AbstractTemplate):
     @staticmethod
     def _title_template() -> str:
-        return "Last Week MEV Info"
+        return "Last Week's MEV Info"
 
     @staticmethod
     def _stats_templates() -> List[dict[str, str]]:
@@ -178,7 +175,7 @@ class WeekOverviewNumberOfSwaps(AbstractTemplate):
 class WeekOverviewExtractedAmount(AbstractTemplate):
     @staticmethod
     def _title_template() -> str:
-        return "Last Week MEV Info"
+        return "Last Week's MEV Info"
 
     @staticmethod
     def _stats_templates() -> List[dict[str, str]]:
@@ -206,7 +203,7 @@ class WeekOverviewExtractedAmount(AbstractTemplate):
 class WeekOverviewProfitAmount(AbstractTemplate):
     @staticmethod
     def _title_template() -> str:
-        return "Last Week MEV Info"
+        return "Last Week's MEV Info"
 
     @staticmethod
     def _stats_templates() -> List[dict[str, str]]:
@@ -234,7 +231,7 @@ class WeekOverviewProfitAmount(AbstractTemplate):
 class WeekOverviewDex(AbstractTemplate):
     @staticmethod
     def _title_template() -> str:
-        return "Last Week MEV Info"
+        return "Last Week's MEV Info"
 
     @staticmethod
     def _stats_templates() -> List[dict[str, str]]:
@@ -258,7 +255,7 @@ class WeekOverviewDex(AbstractTemplate):
 class WeekOverviewVictims(AbstractTemplate):
     @staticmethod
     def _title_template() -> str:
-        return "Last Week MEV Info"
+        return "Last Week's MEV Info"
 
     @staticmethod
     def _stats_templates() -> List[dict[str, str]]:

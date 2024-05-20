@@ -10,7 +10,7 @@ class TwitterAPI:
         self.client_v2 = self._get_client_v2()
         self.client_v1 = self._get_client_v1()
         self.tweet_response_limit = 20
-        self.bot_id = self.get_me_id()
+        self.bot_id = 1760361147662753792
 
     def _get_client_v2(self) -> tweepy.Client:
         """Returns V2 version of API client

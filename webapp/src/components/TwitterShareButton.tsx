@@ -4,7 +4,7 @@ export interface TwitterShareButtonProps extends Omit<ButtonProps, "onClick"> {
   text: string;
 }
 
-export const APP_URL = "https://have-i-been-mevd.bleu.fi/";
+export const APP_URL = "https://mevscanner.com/";
 
 export function TwitterShareButton({ text }: TwitterShareButtonProps) {
   const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;

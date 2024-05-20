@@ -9,7 +9,6 @@ from lib.templates import (
     WeekOverviewProfitAmount,
     WeekOverviewVictims,
     WeekOverviewDex,
-    format_protocol_name,
 )
 
 

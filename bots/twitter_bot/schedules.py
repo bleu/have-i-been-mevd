@@ -39,5 +39,5 @@ async def post_all_reports():
 
 SCHEDULE = [
     ["monday", "14:00", weekly_report, asyncio.create_task],
-    ["minutes", ":02", reply_on_mentions, asyncio.create_task],
+    ["minutes", 2, reply_on_mentions, asyncio.create_task],
 ]

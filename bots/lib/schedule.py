@@ -21,13 +21,16 @@ def add_new_schedule(
         task_func : str
             The function that is going to be called in passed interval
     """
-    logging.debug(
-        f"Added new schedule task: {interval} at {time_str} - {task_func.__name__}"
-    )
-    if "second" in interval:
+    if "second" in interval or "minute" in interval:
+        logging.debug(
+            f"Added new schedule task: {interval} every {time_str} - {task_func.__name__}"
+        )
         scheduler = getattr(schedule.every(int(time_str)), interval)
         scheduler.do(lambda: asyncio_function(task_func()))
     else:
+        logging.debug(
+            f"Added new schedule task: {interval} at {time_str} - {task_func.__name__}"
+        )
         scheduler = getattr(schedule.every(), interval)
         scheduler.at(time_str).do(lambda: asyncio_function(task_func()))
 

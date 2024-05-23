@@ -44,7 +44,7 @@ class TwitterAPI:
 
     def get_mentions(
         self,
-        look_back_timedelta: timedelta = timedelta(minutes=20),
+        look_back_timedelta: timedelta = timedelta(minutes=60),
     ) -> List[tweepy.Tweet]:
         start_time = datetime.now(timezone.utc) - look_back_timedelta
 

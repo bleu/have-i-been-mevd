@@ -26,6 +26,7 @@ async def reply_on_mentions():
         twitter_api = TwitterAPI()
         mentions = twitter_api.get_mentions()
         if not mentions:
+            logging.info("No mentions found.")
             return
         mentions_to_reply = filter_not_replied_mentions(
             mentions, database_replied_tweets
@@ -53,6 +54,7 @@ async def reply_on_mention(twitter_api: TwitterAPI, mention: tweepy.Tweet):
     eth_address = extract_eth_address(mention["text"])
     address_bytes = get_address(eth_address)
     if not address_bytes:
+        logging.info("Invalid Ethereum address found in the tweet.")
         # twitter_api.post_tweet(
         #     {
         #         "text": "Invalid Ethereum address found in the tweet. Please provide a valid Ethereum address or ENS name on the tweet text."

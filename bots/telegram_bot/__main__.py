@@ -1,6 +1,7 @@
 from dataclasses import asdict
 import logging
 import os
+import sentry_sdk
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext
 
@@ -15,6 +16,11 @@ from lib.zero_mev.api import get_all_mev_transactions_related_to_address
 from telegram.ext import (
     Application,
     CommandHandler,
+)
+
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    traces_sample_rate=1,
 )
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.INFO)

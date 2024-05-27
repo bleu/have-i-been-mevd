@@ -1,9 +1,16 @@
+import os
 import logging
 import asyncio
 
 import schedule
+import sentry_sdk
 
 from lib.schedule import schedule_module
+
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    traces_sample_rate=1,
+)
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 

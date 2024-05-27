@@ -3,6 +3,7 @@ import functools
 import os
 import logging
 import schedule
+import sentry_sdk
 
 from discord_bot.commands import bot as bot_client
 from discord_bot.reports import (
@@ -14,6 +15,11 @@ from discord_bot.reports import (
 )
 from lib.schedule import schedule_module
 from lib.task_rotation import get_current_task
+
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    traces_sample_rate=1,
+)
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 

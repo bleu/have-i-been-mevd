@@ -44,7 +44,7 @@ class AbstractTemplate(ABC):
     def _footers_templates() -> List[str]:
         return [
             "Stop Feeding the MEV bots!",
-            "Install MEV blocker: https://mevblocker.io/",
+            "Install MEV Blocker: https://mevblocker.io/",
         ]
 
     @staticmethod

@@ -6,7 +6,7 @@ export function Footer() {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="https://github.com/bleu-fi"
+          href="https://github.com/bleu"
           className="font-extrabold"
         >
           bleu
